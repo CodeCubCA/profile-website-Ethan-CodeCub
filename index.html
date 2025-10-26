@@ -57,6 +57,14 @@
             </div>
         </div>
 
+        <div class="menu-item" data-target="projects-section">
+            <button class="menu-button">💻<br>Projects</button>
+            <div class="menu-dropdown">
+                <a href="#projects-section">All Projects</a>
+                <a href="#projects-section">Portfolio Website</a>
+            </div>
+        </div>
+
         <div class="menu-item" data-target="videos-section">
             <button class="menu-button">🎥<br>Videos</button>
             <div class="menu-dropdown">
@@ -339,6 +347,86 @@
                         <p>Discover the incredible story of a mathematician who challenged the very foundations of mathematics!</p>
                         <div class="youtube-link">🎬 Watch on YouTube</div>
                     </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Projects Section -->
+        <div class="section projects-section" id="projects-section">
+            <h2 class="section-title">💻 My Projects</h2>
+            <p style="color: #666; margin-bottom: 2rem;">Check out the cool projects I've built! 🚀</p>
+
+            <div class="project-card mt-8">
+                <div class="project-screenshot">
+                    <div class="screenshot-container">
+                        <img src="img/profile.png" alt="Interactive Profile Website Screenshot" class="project-image">
+                    </div>
+                </div>
+
+                <div class="project-info">
+                    <h3 class="project-title">Interactive Profile Website</h3>
+                    <p class="project-description">
+                        A fully interactive profile website featuring real-time coding environments, mobile-optimized games, and an enhanced Python interpreter.
+                        Built with responsive design and includes features like Block Breaker with touch controls, Memory Game, and live code execution with support for imports, input(), and conditionals.
+                    </p>
+
+                    <div class="tech-stack">
+                        <span class="tech-badge html">HTML5</span>
+                        <span class="tech-badge css">CSS3</span>
+                        <span class="tech-badge js">JavaScript</span>
+                        <span class="tech-badge responsive">Responsive Design</span>
+                        <span class="tech-badge git">Git</span>
+                        <span class="tech-badge github">GitHub Pages</span>
+                    </div>
+
+                    <div class="project-buttons">
+                        <a href="https://github.com/CodeCubCA/profile-website-Ethan-CodeCub" target="_blank" class="btn btn-github">
+                            <svg class="github-icon" viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M12 0C5.374 0 0 5.373 0 12 0 17.302 3.438 21.8 8.207 23.387c.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23A11.509 11.509 0 0112 5.803c1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576C20.566 21.797 24 17.3 24 12c0-6.627-5.373-12-12-12z"/>
+                            </svg>
+                            Repository
+                        </a>
+                        <a href="https://ethan.codecub.org" target="_blank" class="btn btn-live">
+                            🚀 Try Live
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- AI Chatbox Project -->
+            <div class="project-card ai-project mt-8">
+                <div class="project-screenshot ai-screenshot">
+                    <div class="screenshot-container ai-container">
+                        <img src="img/chatbox.png" alt="Study Buddy AI Assistant Screenshot" class="project-image">
+                    </div>
+                </div>
+
+                <div class="project-info">
+                    <h3 class="project-title ai-title">Study Buddy AI Assistant</h3>
+                    <p class="project-description">
+                        An intelligent AI-powered chatbot built with Streamlit and Groq API. Features real-time conversation, context awareness, and deployed to the cloud with CI/CD.
+                        Perfect for students seeking instant help with homework, explanations, and learning support across various subjects.
+                    </p>
+
+                    <div class="tech-stack">
+                        <span class="tech-badge python">Python</span>
+                        <span class="tech-badge streamlit">Streamlit</span>
+                        <span class="tech-badge groq">Groq API</span>
+                        <span class="tech-badge git">Git</span>
+                        <span class="tech-badge streamlit-cloud">Streamlit Cloud</span>
+                    </div>
+
+                    <div class="project-buttons">
+                        <a href="https://github.com/CodeCubCA/ai-chatbox-Ethan-CodeCub" target="_blank" class="btn btn-github">
+                            <svg class="github-icon" viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M12 0C5.374 0 0 5.373 0 12 0 17.302 3.438 21.8 8.207 23.387c.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23A11.509 11.509 0 0112 5.803c1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576C20.566 21.797 24 17.3 24 12c0-6.627-5.373-12-12-12z"/>
+                            </svg>
+                            Repository
+                        </a>
+                        <a href="https://ai-chatbox-ethan-codecub.streamlit.app" target="_blank" class="btn btn-ai-live">
+                            🤖 Try Live
+                        </a>
+                    </div>
                 </div>
             </div>
         </div>
