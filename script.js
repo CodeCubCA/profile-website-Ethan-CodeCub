@@ -606,7 +606,7 @@ for(let i = 5; i >= 1; i--) {
 console.log("🎉 Blast off!");
 
 // Fun with loops and patterns
-console.log("\n✨ Creating a pattern:");
+console.log("✨ Creating a pattern:");
 for(let i = 1; i <= 5; i++) {
     let stars = "";
     for(let j = 1; j <= i; j++) {
@@ -618,6 +618,10 @@ for(let i = 1; i <= 5; i++) {
 alert("🎊 Animation complete!");`;
     } else {
         editor.value = examples[type] || examples.default;
+    }
+    // Auto-run the code after loading example
+    if (type !== 'default') {
+        setTimeout(() => runJavaScriptCode(), 100);
     }
 }
 
