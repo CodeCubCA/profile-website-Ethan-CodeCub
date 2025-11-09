@@ -1063,11 +1063,13 @@ function startPlaneGame() {
         rightBtn.addEventListener('touchend', (e) => { e.preventDefault(); handleTouchEnd('d'); });
 
         // Fire button for shooting lasers
-        fireBtn.addEventListener('mousedown', () => handleTouchStart(' '));
-        fireBtn.addEventListener('mouseup', () => handleTouchEnd(' '));
-        fireBtn.addEventListener('mouseleave', () => handleTouchEnd(' '));
-        fireBtn.addEventListener('touchstart', (e) => { e.preventDefault(); handleTouchStart(' '); });
-        fireBtn.addEventListener('touchend', (e) => { e.preventDefault(); handleTouchEnd(' '); });
+        fireBtn.addEventListener('mousedown', () => {
+            shootLaser();
+        });
+        fireBtn.addEventListener('touchstart', (e) => {
+            e.preventDefault();
+            shootLaser();
+        });
 
         // Movement loop
         function updatePlanePosition() {
