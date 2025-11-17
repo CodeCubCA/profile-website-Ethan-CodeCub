@@ -1,588 +1,956 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Ethan - Coding Profile</title>
-    <link rel="icon" type="image/png" href="images/logo1.png">
-    <link rel="icon" type="image/svg+xml" href="images/logo1.svg">
-    <link rel="stylesheet" href="styles.css">
-</head>
-<body>
+    <link rel="icon" type="image/png" href="images/logo1.png" />
+    <link rel="icon" type="image/svg+xml" href="images/logo1.svg" />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
     <!-- Page Navigation Menu -->
     <div class="page-menu">
-        <div class="menu-item" data-target="hero-section">
-            <button class="menu-button">🏠<br>Home</button>
-            <div class="menu-dropdown">
-                <a href="#hero-section">Welcome</a>
-                <a href="#hero-section">Profile Info</a>
-            </div>
+      <div class="menu-item" data-target="hero-section">
+        <button class="menu-button">🏠<br />Home</button>
+        <div class="menu-dropdown">
+          <a href="#hero-section">Welcome</a>
+          <a href="#hero-section">Profile Info</a>
         </div>
+      </div>
 
-        <div class="menu-item" data-target="about-section">
-            <button class="menu-button">👋<br>About</button>
-            <div class="menu-dropdown">
-                <a href="#about-section">About Me</a>
-                <a href="#about-section">Age & School</a>
-                <a href="#about-section">My Bio</a>
-            </div>
+      <div class="menu-item" data-target="about-section">
+        <button class="menu-button">👋<br />About</button>
+        <div class="menu-dropdown">
+          <a href="#about-section">About Me</a>
+          <a href="#about-section">Age & School</a>
+          <a href="#about-section">My Bio</a>
         </div>
+      </div>
 
-        <div class="menu-item" data-target="journey-section">
-            <button class="menu-button">🚀<br>Journey</button>
-            <div class="menu-dropdown">
-                <a href="#journey-section">Coding Journey</a>
-                <a href="#journey-section">When I Started</a>
-                <a href="#journey-section">My Goals</a>
-            </div>
+      <div class="menu-item" data-target="journey-section">
+        <button class="menu-button">🚀<br />Journey</button>
+        <div class="menu-dropdown">
+          <a href="#journey-section">Coding Journey</a>
+          <a href="#journey-section">When I Started</a>
+          <a href="#journey-section">My Goals</a>
         </div>
+      </div>
 
-        <div class="menu-item" data-target="games-section">
-            <button class="menu-button">🎮<br>Games</button>
-            <div class="menu-dropdown">
-                <a href="#games-section">All Games</a>
-                <a href="#" onclick="openMemoryGame()">🧠 Memory Game</a>
-                <a href="#" onclick="openPlaneLaserShooter()">✈️ Plane Shooter</a>
-                <a href="#" onclick="openMathChallenge()">🧮 Math Challenge</a>
-            </div>
+      <div class="menu-item" data-target="games-section">
+        <button class="menu-button">🎮<br />Games</button>
+        <div class="menu-dropdown">
+          <a href="#games-section">All Games</a>
+          <a href="#" onclick="openMemoryGame()">🧠 Memory Game</a>
+          <a href="#" onclick="openPlaneLaserShooter()">✈️ Plane Shooter</a>
+          <a href="#" onclick="openMathChallenge()">🧮 Math Challenge</a>
         </div>
+      </div>
 
-        <div class="menu-item" data-target="coding-environments">
-            <button class="menu-button">💻<br>Code</button>
-            <div class="menu-dropdown">
-                <a href="#" onclick="openPythonEnvironment()">🐍 Python</a>
-                <a href="#" onclick="openHTMLEnvironment()">🌐 HTML</a>
-                <a href="#" onclick="openJavaScriptEnvironment()">✨ JavaScript</a>
-                <a href="#" onclick="openCSSEnvironment()">🎨 CSS</a>
-            </div>
+      <div class="menu-item" data-target="coding-environments">
+        <button class="menu-button">💻<br />Code</button>
+        <div class="menu-dropdown">
+          <a href="#" onclick="openPythonEnvironment()">🐍 Python</a>
+          <a href="#" onclick="openHTMLEnvironment()">🌐 HTML</a>
+          <a href="#" onclick="openJavaScriptEnvironment()">✨ JavaScript</a>
+          <a href="#" onclick="openCSSEnvironment()">🎨 CSS</a>
         </div>
+      </div>
 
-        <div class="menu-item" data-target="projects-section">
-            <button class="menu-button">💻<br>Projects</button>
-            <div class="menu-dropdown">
-                <a href="#projects-section">All Projects</a>
-                <a href="#projects-section">Portfolio Website</a>
-            </div>
+      <div class="menu-item" data-target="projects-section">
+        <button class="menu-button">💻<br />Projects</button>
+        <div class="menu-dropdown">
+          <a href="#projects-section">All Projects</a>
+          <a href="#projects-section">Portfolio Website</a>
         </div>
+      </div>
 
-        <div class="menu-item" data-target="videos-section">
-            <button class="menu-button">🎥<br>Videos</button>
-            <div class="menu-dropdown">
-                <a href="#videos-section">All Videos</a>
-                <a href="#minecraft-videos">🎮 Minecraft</a>
-                <a href="#coding-videos">💻 Coding</a>
-                <a href="#math-videos">🧮 Math & Geometry</a>
-            </div>
+      <div class="menu-item" data-target="videos-section">
+        <button class="menu-button">🎥<br />Videos</button>
+        <div class="menu-dropdown">
+          <a href="#videos-section">All Videos</a>
+          <a href="#minecraft-videos">🎮 Minecraft</a>
+          <a href="#coding-videos">💻 Coding</a>
+          <a href="#math-videos">🧮 Math & Geometry</a>
         </div>
+      </div>
     </div>
 
     <div class="main-container">
-        <!-- Hero Section -->
-        <div class="section hero-section" id="hero-section">
-            <div class="profile-photo-container">
-                <img src="images/截屏2025-09-28 09.48.06.png" alt="Ethan's Profile Photo" class="profile-photo">
-            </div>
-            <h1>Ethan</h1>
-            <div class="decorative-line"></div>
-            <p class="welcome-message">Welcome to my coding profile!</p>
+      <!-- Hero Section -->
+      <div class="section hero-section" id="hero-section">
+        <div class="profile-photo-container">
+          <img
+            src="images/截屏2025-09-28 09.48.06.png"
+            alt="Ethan's Profile Photo"
+            class="profile-photo"
+          />
+        </div>
+        <h1>Ethan</h1>
+        <div class="decorative-line"></div>
+        <p class="welcome-message">Welcome to my coding profile!</p>
 
-            <div class="profile-card">
-                <div class="profile-title">Developer & Creator</div>
-                <div class="profile-subtitle">Passionate about building amazing digital experiences</div>
-            </div>
+        <div class="profile-card">
+          <div class="profile-title">Developer & Creator</div>
+          <div class="profile-subtitle">
+            Passionate about building amazing digital experiences
+          </div>
+        </div>
+      </div>
+
+      <!-- About Me Section -->
+      <div class="section about-section" id="about-section">
+        <h2 class="section-title">About Me</h2>
+
+        <div class="about-grid">
+          <div class="about-card">
+            <h3><span class="icon">🎂</span>Age</h3>
+            <p>9 years old</p>
+          </div>
+          <div class="about-card">
+            <h3><span class="icon">🏫</span>School</h3>
+            <p>AME</p>
+          </div>
         </div>
 
-        <!-- About Me Section -->
-        <div class="section about-section" id="about-section">
-            <h2 class="section-title">About Me</h2>
+        <div class="bio-card">
+          <h3><span class="icon">👋</span>Hi there!</h3>
+          <p>
+            I'm Ethan, and I absolutely love coding! I started learning
+            programming because I think it's super cool how you can create
+            amazing things with just code. When I'm not at school, you can find
+            me working on fun coding projects and learning new programming
+            languages!
+          </p>
+        </div>
+      </div>
 
-            <div class="about-grid">
-                <div class="about-card">
-                    <h3><span class="icon">🎂</span>Age</h3>
-                    <p>9 years old</p>
-                </div>
-                <div class="about-card">
-                    <h3><span class="icon">🏫</span>School</h3>
-                    <p>AME</p>
-                </div>
-            </div>
+      <!-- My Coding Journey Section -->
+      <div class="section journey-section" id="journey-section">
+        <h2 class="section-title">My Coding Journey</h2>
 
-            <div class="bio-card">
-                <h3><span class="icon">👋</span>Hi there!</h3>
-                <p>I'm Ethan, and I absolutely love coding! I started learning programming because I think it's super cool how you can create amazing things with just code. When I'm not at school, you can find me working on fun coding projects and learning new programming languages!</p>
+        <div class="timeline">
+          <div class="timeline-item">
+            <div class="timeline-title">
+              <span class="icon">🚀</span>When I Started Coding
             </div>
+            <div class="timeline-content">
+              <p>
+                <strong>Your journey begins here!</strong> Think about when you
+                first discovered coding. Was it through a game, a website, or
+                maybe a cool app? Write about that exciting moment when you
+                realized you could create your own digital magic!
+              </p>
+              <p>
+                <em
+                  >Example: "I started coding when I was 7 years old after
+                  playing Scratch games online..."</em
+                >
+              </p>
+            </div>
+          </div>
+
+          <div class="timeline-item">
+            <div class="timeline-title">
+              <span class="icon">💻</span>My Favorite Programming Language
+            </div>
+            <div class="timeline-content">
+              <p>
+                <strong>Pick your superhero language!</strong> Which programming
+                language makes you feel like a coding superhero?
+              </p>
+              <div class="coding-goals">
+                <div class="goal-badge">🐍 Python</div>
+                <div class="goal-badge">🌐 HTML</div>
+                <div class="goal-badge">✨ JavaScript</div>
+              </div>
+              <p><em>Choose one and tell us why it's awesome!</em></p>
+            </div>
+          </div>
+
+          <div class="timeline-item">
+            <div class="timeline-title">
+              <span class="icon">❤️</span>What I Love About Coding
+            </div>
+            <div class="timeline-content">
+              <p>
+                <strong>Share your coding superpowers!</strong> What makes
+                coding so amazing for you? Is it solving puzzles, creating
+                games, building websites, or something else entirely?
+              </p>
+              <p>
+                <em
+                  >Ideas to think about: "I love how coding lets me create my
+                  own games..." or "The best part about coding is seeing my
+                  ideas come to life..."</em
+                >
+              </p>
+            </div>
+          </div>
+
+          <div class="timeline-item">
+            <div class="timeline-title">
+              <span class="icon">🎯</span>engineer and coding goals
+            </div>
+            <div class="timeline-content">
+              <p>
+                <strong>Dream big!</strong> My ultimate goal is to
+                <strong>be an engineer</strong> and create amazing things that
+                help people and make the world more awesome!
+              </p>
+              <p>
+                <em
+                  >What kind of engineer or coder do you want to be? Game
+                  developer? Web designer? App creator? Robot programmer? AI
+                  creator?</em
+                >
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- My Games Section -->
+      <div class="section games-section" id="games-section">
+        <h2 class="section-title">My Games</h2>
+        <p style="color: #666; margin-bottom: 2rem">
+          Check out all the amazing games I'm working on! Each one is a new
+          adventure waiting to be created.
+        </p>
+
+        <div class="games-grid">
+          <div class="game-card space">
+            <div class="game-icon">✈️</div>
+            <h3 class="game-title">Laser Plane Shooter</h3>
+            <div class="game-status play-now">Play Now!</div>
+            <p class="game-description">
+              Fly your fighter plane and shoot down enemy aircraft with powerful
+              lasers!
+            </p>
+          </div>
+
+          <div class="game-card animal">
+            <div class="game-icon">🐾</div>
+            <h3 class="game-title">Animal Rescue</h3>
+            <div class="game-status play-now">Play Now!</div>
+            <p class="game-description">
+              Help rescue adorable animals and create a safe wildlife sanctuary!
+            </p>
+          </div>
+
+          <div class="game-card math">
+            <div class="game-icon">🧮</div>
+            <h3 class="game-title">Math Challenge</h3>
+            <div class="game-status play-now">Play Now!</div>
+            <p class="game-description">
+              Make math fun with exciting puzzles and brain-teasing challenges!
+            </p>
+          </div>
+
+          <div class="game-card memory">
+            <div class="game-icon">🧠</div>
+            <h3 class="game-title">Memory Game</h3>
+            <div class="game-status play-now">Play Now!</div>
+            <p class="game-description">
+              Test your memory skills with colorful cards and fun patterns!
+            </p>
+          </div>
+
+          <div class="game-card ocean">
+            <div class="game-icon">🌊</div>
+            <h3 class="game-title">Ocean Explorer</h3>
+            <div class="game-status play-now">Play Now!</div>
+            <p class="game-description">
+              Dive deep into the ocean and discover amazing sea creatures!
+            </p>
+          </div>
+
+          <div class="game-card dragon">
+            <div class="game-icon">🔨</div>
+            <h3 class="game-title">Whack a Mole</h3>
+            <div class="game-status play-now">Play Now!</div>
+            <p class="game-description">
+              Click the moles when they pop up! Get as many as you can!
+            </p>
+          </div>
+
+          <div class="game-card superhero">
+            <div class="game-icon">🧱</div>
+            <h3 class="game-title">Block Breaker</h3>
+            <div class="game-status play-now">Play Now!</div>
+            <p class="game-description">
+              Break all the blocks with your bouncing ball and paddle!
+            </p>
+          </div>
+
+          <div class="game-card computer">
+            <div class="game-icon">💻</div>
+            <h3 class="game-title">Fix the Computer</h3>
+            <div class="game-status play-now">Play Now!</div>
+            <p class="game-description">
+              Help repair broken computers by fixing errors and installing
+              updates!
+            </p>
+          </div>
+
+          <div class="game-card magic">
+            <div class="game-icon">🪙</div>
+            <h3 class="game-title">Collect the Coins</h3>
+            <div class="game-status play-now">Play Now!</div>
+            <p class="game-description">
+              Run around and collect as many shiny coins as you can!
+            </p>
+          </div>
+
+          <div class="game-card treasure">
+            <div class="game-icon">🏓</div>
+            <h3 class="game-title">Ping Pong</h3>
+            <div class="game-status play-now">Play Now!</div>
+            <p class="game-description">
+              Play ping pong and try to beat your opponent!
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Videos Section -->
+      <div class="section videos-section" id="videos-section">
+        <h2 class="section-title">🎥 My Favorite Videos</h2>
+        <p style="color: #666; margin-bottom: 2rem">
+          Click on any video below to watch it on YouTube! 📺
+        </p>
+
+        <!-- Minecraft Videos -->
+        <div class="video-category" id="minecraft-videos">
+          <h3 class="category-title">🎮 Minecraft Videos</h3>
+          <div class="videos-grid">
+            <a
+              href="https://www.youtube.com/watch?v=MmB9b5njVbA"
+              target="_blank"
+              class="video-card"
+            >
+              <div
+                class="video-thumbnail"
+                style="
+                  background: linear-gradient(45deg, #2ecc71, #27ae60);
+                  display: flex;
+                  align-items: center;
+                  justify-content: center;
+                  color: white;
+                  font-size: 3rem;
+                  cursor: pointer;
+                  position: relative;
+                "
+              >
+                🏠
+                <div class="play-button">▶️</div>
+              </div>
+              <h4>How to Survive Your First Night</h4>
+              <p>
+                Learn the basics of Minecraft survival! Build shelter, craft
+                tools, and stay safe from monsters.
+              </p>
+              <div class="youtube-link">🎬 Watch on YouTube</div>
+            </a>
+            <a
+              href="https://www.youtube.com/watch?v=06by0VvEReg"
+              target="_blank"
+              class="video-card"
+            >
+              <div
+                class="video-thumbnail"
+                style="
+                  background: linear-gradient(45deg, #e74c3c, #c0392b);
+                  display: flex;
+                  align-items: center;
+                  justify-content: center;
+                  color: white;
+                  font-size: 3rem;
+                  cursor: pointer;
+                  position: relative;
+                "
+              >
+                ⚡
+                <div class="play-button">▶️</div>
+              </div>
+              <h4>Redstone Basics</h4>
+              <p>
+                Introduction to Minecraft redstone circuits! Learn to create
+                amazing contraptions and machines.
+              </p>
+              <div class="youtube-link">🎬 Watch on YouTube</div>
+            </a>
+            <a
+              href="https://www.youtube.com/watch?v=B36Ehzf2cxE"
+              target="_blank"
+              class="video-card"
+            >
+              <div
+                class="video-thumbnail"
+                style="
+                  background: linear-gradient(45deg, #9b59b6, #8e44ad);
+                  display: flex;
+                  align-items: center;
+                  justify-content: center;
+                  color: white;
+                  font-size: 3rem;
+                  cursor: pointer;
+                  position: relative;
+                "
+              >
+                🏰
+                <div class="play-button">▶️</div>
+              </div>
+              <h4>Building Epic Structures</h4>
+              <p>
+                Amazing building tips and tricks! Create castles, houses, and
+                incredible structures.
+              </p>
+              <div class="youtube-link">🎬 Watch on YouTube</div>
+            </a>
+          </div>
         </div>
 
-        <!-- My Coding Journey Section -->
-        <div class="section journey-section" id="journey-section">
-            <h2 class="section-title">My Coding Journey</h2>
-
-            <div class="timeline">
-                <div class="timeline-item">
-                    <div class="timeline-title">
-                        <span class="icon">🚀</span>When I Started Coding
-                    </div>
-                    <div class="timeline-content">
-                        <p><strong>Your journey begins here!</strong> Think about when you first discovered coding. Was it through a game, a website, or maybe a cool app? Write about that exciting moment when you realized you could create your own digital magic!</p>
-                        <p><em>Example: "I started coding when I was 7 years old after playing Scratch games online..."</em></p>
-                    </div>
-                </div>
-
-                <div class="timeline-item">
-                    <div class="timeline-title">
-                        <span class="icon">💻</span>My Favorite Programming Language
-                    </div>
-                    <div class="timeline-content">
-                        <p><strong>Pick your superhero language!</strong> Which programming language makes you feel like a coding superhero?</p>
-                        <div class="coding-goals">
-                            <div class="goal-badge">🐍 Python</div>
-                            <div class="goal-badge">🌐 HTML</div>
-                            <div class="goal-badge">✨ JavaScript</div>
-                        </div>
-                        <p><em>Choose one and tell us why it's awesome!</em></p>
-                    </div>
-                </div>
-
-                <div class="timeline-item">
-                    <div class="timeline-title">
-                        <span class="icon">❤️</span>What I Love About Coding
-                    </div>
-                    <div class="timeline-content">
-                        <p><strong>Share your coding superpowers!</strong> What makes coding so amazing for you? Is it solving puzzles, creating games, building websites, or something else entirely?</p>
-                        <p><em>Ideas to think about: "I love how coding lets me create my own games..." or "The best part about coding is seeing my ideas come to life..."</em></p>
-                    </div>
-                </div>
-
-                <div class="timeline-item">
-                    <div class="timeline-title">
-                        <span class="icon">🎯</span>My Coding Goal
-                    </div>
-                    <div class="timeline-content">
-                        <p><strong>Dream big!</strong> My ultimate goal is to <strong>be an engineer</strong> and create amazing things that help people and make the world more awesome!</p>
-                        <p><em>What kind of engineer or coder do you want to be? Game developer? Web designer? App creator? Robot programmer?</em></p>
-                    </div>
-                </div>
-            </div>
+        <!-- Coding Videos -->
+        <div class="video-category" id="coding-videos">
+          <h3 class="category-title">💻 Coding Videos</h3>
+          <div class="videos-grid">
+            <a
+              href="https://www.youtube.com/watch?v=rfscVS0vtbw"
+              target="_blank"
+              class="video-card"
+            >
+              <div
+                class="video-thumbnail"
+                style="
+                  background: linear-gradient(45deg, #3498db, #2980b9);
+                  display: flex;
+                  align-items: center;
+                  justify-content: center;
+                  color: white;
+                  font-size: 3rem;
+                  cursor: pointer;
+                  position: relative;
+                "
+              >
+                🐍
+                <div class="play-button">▶️</div>
+              </div>
+              <h4>Python for Beginners</h4>
+              <p>
+                Start your coding journey with Python! Learn variables, loops,
+                and fun programming concepts.
+              </p>
+              <div class="youtube-link">🎬 Watch on YouTube</div>
+            </a>
+            <a
+              href="https://www.youtube.com/watch?v=UB1O30fR-EE"
+              target="_blank"
+              class="video-card"
+            >
+              <div
+                class="video-thumbnail"
+                style="
+                  background: linear-gradient(45deg, #f39c12, #e67e22);
+                  display: flex;
+                  align-items: center;
+                  justify-content: center;
+                  color: white;
+                  font-size: 3rem;
+                  cursor: pointer;
+                  position: relative;
+                "
+              >
+                🌐
+                <div class="play-button">▶️</div>
+              </div>
+              <h4>HTML Basics</h4>
+              <p>
+                Build your first website! Learn HTML tags, elements, and how to
+                create web pages.
+              </p>
+              <div class="youtube-link">🎬 Watch on YouTube</div>
+            </a>
+            <a
+              href="https://www.youtube.com/watch?v=W6NZfCO5SIk"
+              target="_blank"
+              class="video-card"
+            >
+              <div
+                class="video-thumbnail"
+                style="
+                  background: linear-gradient(45deg, #f1c40f, #f39c12);
+                  display: flex;
+                  align-items: center;
+                  justify-content: center;
+                  color: white;
+                  font-size: 3rem;
+                  cursor: pointer;
+                  position: relative;
+                "
+              >
+                ✨
+                <div class="play-button">▶️</div>
+              </div>
+              <h4>JavaScript Fun</h4>
+              <p>
+                Make your websites interactive! Learn JavaScript to add
+                animations and cool effects.
+              </p>
+              <div class="youtube-link">🎬 Watch on YouTube</div>
+            </a>
+          </div>
         </div>
 
-        <!-- My Games Section -->
-        <div class="section games-section" id="games-section">
-            <h2 class="section-title">My Games</h2>
-            <p style="color: #666; margin-bottom: 2rem;">Check out all the amazing games I'm working on! Each one is a new adventure waiting to be created.</p>
+        <!-- Math & Geometry Videos -->
+        <div class="video-category" id="math-videos">
+          <h3 class="category-title">🧮 Math & Geometry Videos</h3>
+          <div class="videos-grid">
+            <a
+              href="https://www.youtube.com/watch?v=XFDM1ip5HdU"
+              target="_blank"
+              class="video-card"
+            >
+              <div
+                class="video-thumbnail"
+                style="
+                  background: linear-gradient(45deg, #e91e63, #ad1457);
+                  display: flex;
+                  align-items: center;
+                  justify-content: center;
+                  color: white;
+                  font-size: 3rem;
+                  cursor: pointer;
+                  position: relative;
+                "
+              >
+                💡
+                <div class="play-button">▶️</div>
+              </div>
+              <h4>What does it feel like to invent math?</h4>
+              <p>
+                Discover the creative spark behind mathematical thinking!
+                Experience the excitement of inventing new mathematical
+                concepts.
+              </p>
+              <div class="youtube-link">🎬 Watch on YouTube</div>
+            </a>
+            <a
+              href="https://www.youtube.com/watch?v=SwGbHsBAcZ0"
+              target="_blank"
+              class="video-card"
+            >
+              <div
+                class="video-thumbnail"
+                style="
+                  background: linear-gradient(45deg, #00bcd4, #0097a7);
+                  display: flex;
+                  align-items: center;
+                  justify-content: center;
+                  color: white;
+                  font-size: 3rem;
+                  cursor: pointer;
+                  position: relative;
+                "
+              >
+                🌌
+                <div class="play-button">▶️</div>
+              </div>
+              <h4>4 Dimension</h4>
+              <p>
+                Journey beyond our 3D world and explore the mind-bending
+                concepts of the fourth dimension!
+              </p>
+              <div class="youtube-link">🎬 Watch on YouTube</div>
+            </a>
+            <a
+              href="https://www.youtube.com/watch?v=_cr46G2K5Fo"
+              target="_blank"
+              class="video-card"
+            >
+              <div
+                class="video-thumbnail"
+                style="
+                  background: linear-gradient(45deg, #607d8b, #455a64);
+                  display: flex;
+                  align-items: center;
+                  justify-content: center;
+                  color: white;
+                  font-size: 3rem;
+                  cursor: pointer;
+                  position: relative;
+                "
+              >
+                💥
+                <div class="play-button">▶️</div>
+              </div>
+              <h4>A Man Who Broke Math</h4>
+              <p>
+                Discover the incredible story of a mathematician who challenged
+                the very foundations of mathematics!
+              </p>
+              <div class="youtube-link">🎬 Watch on YouTube</div>
+            </a>
+          </div>
+        </div>
+      </div>
 
-            <div class="games-grid">
-                <div class="game-card space">
-                    <div class="game-icon">✈️</div>
-                    <h3 class="game-title">Laser Plane Shooter</h3>
-                    <div class="game-status play-now">Play Now!</div>
-                    <p class="game-description">Fly your fighter plane and shoot down enemy aircraft with powerful lasers!</p>
-                </div>
+      <!-- Projects Section -->
+      <div class="section projects-section" id="projects-section">
+        <h2 class="section-title">💻 My Projects</h2>
+        <p style="color: #666; margin-bottom: 2rem">
+          Check out the cool projects I've built! 🚀
+        </p>
 
-                <div class="game-card animal">
-                    <div class="game-icon">🐾</div>
-                    <h3 class="game-title">Animal Rescue</h3>
-                    <div class="game-status play-now">Play Now!</div>
-                    <p class="game-description">Help rescue adorable animals and create a safe wildlife sanctuary!</p>
-                </div>
-
-                <div class="game-card math">
-                    <div class="game-icon">🧮</div>
-                    <h3 class="game-title">Math Challenge</h3>
-                    <div class="game-status play-now">Play Now!</div>
-                    <p class="game-description">Make math fun with exciting puzzles and brain-teasing challenges!</p>
-                </div>
-
-                <div class="game-card memory">
-                    <div class="game-icon">🧠</div>
-                    <h3 class="game-title">Memory Game</h3>
-                    <div class="game-status play-now">Play Now!</div>
-                    <p class="game-description">Test your memory skills with colorful cards and fun patterns!</p>
-                </div>
-
-                <div class="game-card ocean">
-                    <div class="game-icon">🌊</div>
-                    <h3 class="game-title">Ocean Explorer</h3>
-                    <div class="game-status play-now">Play Now!</div>
-                    <p class="game-description">Dive deep into the ocean and discover amazing sea creatures!</p>
-                </div>
-
-                <div class="game-card dragon">
-                    <div class="game-icon">🔨</div>
-                    <h3 class="game-title">Whack a Mole</h3>
-                    <div class="game-status play-now">Play Now!</div>
-                    <p class="game-description">Click the moles when they pop up! Get as many as you can!</p>
-                </div>
-
-                <div class="game-card superhero">
-                    <div class="game-icon">🧱</div>
-                    <h3 class="game-title">Block Breaker</h3>
-                    <div class="game-status play-now">Play Now!</div>
-                    <p class="game-description">Break all the blocks with your bouncing ball and paddle!</p>
-                </div>
-
-                <div class="game-card computer">
-                    <div class="game-icon">💻</div>
-                    <h3 class="game-title">Fix the Computer</h3>
-                    <div class="game-status play-now">Play Now!</div>
-                    <p class="game-description">Help repair broken computers by fixing errors and installing updates!</p>
-                </div>
-
-                <div class="game-card magic">
-                    <div class="game-icon">🪙</div>
-                    <h3 class="game-title">Collect the Coins</h3>
-                    <div class="game-status play-now">Play Now!</div>
-                    <p class="game-description">Run around and collect as many shiny coins as you can!</p>
-                </div>
-
-                <div class="game-card treasure">
-                    <div class="game-icon">🏓</div>
-                    <h3 class="game-title">Ping Pong</h3>
-                    <div class="game-status play-now">Play Now!</div>
-                    <p class="game-description">Play ping pong and try to beat your opponent!</p>
-                </div>
+        <div class="project-card mt-8">
+          <div class="project-screenshot">
+            <div class="screenshot-container">
+              <img
+                src="img/profile.png"
+                alt="Interactive Profile Website Screenshot"
+                class="project-image"
+              />
             </div>
+          </div>
+
+          <div class="project-info">
+            <h3 class="project-title">Interactive Profile Website</h3>
+            <p class="project-description">
+              A fully interactive profile website featuring real-time coding
+              environments, mobile-optimized games, and an enhanced Python
+              interpreter. Built with responsive design and includes features
+              like Block Breaker with touch controls, Memory Game, and live code
+              execution with support for imports, input(), and conditionals.
+            </p>
+
+            <div class="tech-stack">
+              <span class="tech-badge html">HTML5</span>
+              <span class="tech-badge css">CSS3</span>
+              <span class="tech-badge js">JavaScript</span>
+              <span class="tech-badge responsive">Responsive Design</span>
+              <span class="tech-badge git">Git</span>
+              <span class="tech-badge github">GitHub Pages</span>
+            </div>
+
+            <div class="project-buttons">
+              <a
+                href="https://github.com/CodeCubCA/profile-website-Ethan-CodeCub"
+                target="_blank"
+                class="btn btn-github"
+              >
+                <svg
+                  class="github-icon"
+                  viewBox="0 0 24 24"
+                  fill="currentColor"
+                >
+                  <path
+                    d="M12 0C5.374 0 0 5.373 0 12 0 17.302 3.438 21.8 8.207 23.387c.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23A11.509 11.509 0 0112 5.803c1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576C20.566 21.797 24 17.3 24 12c0-6.627-5.373-12-12-12z"
+                  />
+                </svg>
+                Repository
+              </a>
+              <a
+                href="https://ethan.codecub.org"
+                target="_blank"
+                class="btn btn-live"
+              >
+                🚀 Try Live
+              </a>
+            </div>
+          </div>
         </div>
 
-        <!-- Videos Section -->
-        <div class="section videos-section" id="videos-section">
-            <h2 class="section-title">🎥 My Favorite Videos</h2>
-            <p style="color: #666; margin-bottom: 2rem;">Click on any video below to watch it on YouTube! 📺</p>
+        <!-- AI Chatbox Project -->
+        <div class="project-card ai-project mt-8">
+          <div class="project-screenshot ai-screenshot">
+            <div class="screenshot-container ai-container">
+              <img
+                src="img/chatbox.png"
+                alt="Study Buddy AI Assistant Screenshot"
+                class="project-image"
+              />
+            </div>
+          </div>
 
-            <!-- Minecraft Videos -->
-            <div class="video-category" id="minecraft-videos">
-                <h3 class="category-title">🎮 Minecraft Videos</h3>
-                <div class="videos-grid">
-                    <a href="https://www.youtube.com/watch?v=MmB9b5njVbA" target="_blank" class="video-card">
-                        <div class="video-thumbnail" style="background: linear-gradient(45deg, #2ecc71, #27ae60); display: flex; align-items: center; justify-content: center; color: white; font-size: 3rem; cursor: pointer; position: relative;">
-                            🏠
-                            <div class="play-button">▶️</div>
-                        </div>
-                        <h4>How to Survive Your First Night</h4>
-                        <p>Learn the basics of Minecraft survival! Build shelter, craft tools, and stay safe from monsters.</p>
-                        <div class="youtube-link">🎬 Watch on YouTube</div>
-                    </a>
-                    <a href="https://www.youtube.com/watch?v=06by0VvEReg" target="_blank" class="video-card">
-                        <div class="video-thumbnail" style="background: linear-gradient(45deg, #e74c3c, #c0392b); display: flex; align-items: center; justify-content: center; color: white; font-size: 3rem; cursor: pointer; position: relative;">
-                            ⚡
-                            <div class="play-button">▶️</div>
-                        </div>
-                        <h4>Redstone Basics</h4>
-                        <p>Introduction to Minecraft redstone circuits! Learn to create amazing contraptions and machines.</p>
-                        <div class="youtube-link">🎬 Watch on YouTube</div>
-                    </a>
-                    <a href="https://www.youtube.com/watch?v=B36Ehzf2cxE" target="_blank" class="video-card">
-                        <div class="video-thumbnail" style="background: linear-gradient(45deg, #9b59b6, #8e44ad); display: flex; align-items: center; justify-content: center; color: white; font-size: 3rem; cursor: pointer; position: relative;">
-                            🏰
-                            <div class="play-button">▶️</div>
-                        </div>
-                        <h4>Building Epic Structures</h4>
-                        <p>Amazing building tips and tricks! Create castles, houses, and incredible structures.</p>
-                        <div class="youtube-link">🎬 Watch on YouTube</div>
-                    </a>
-                </div>
+          <div class="project-info">
+            <h3 class="project-title ai-title">Study Buddy AI Assistant</h3>
+            <p class="project-description">
+              An intelligent AI-powered chatbot built with Streamlit and Groq
+              API. Features real-time conversation, context awareness, and
+              deployed to the cloud with CI/CD. Perfect for students seeking
+              instant help with homework, explanations, and learning support
+              across various subjects.
+            </p>
+
+            <div class="tech-stack">
+              <span class="tech-badge python">Python</span>
+              <span class="tech-badge streamlit">Streamlit</span>
+              <span class="tech-badge groq">Groq API</span>
+              <span class="tech-badge git">Git</span>
+              <span class="tech-badge streamlit-cloud">Streamlit Cloud</span>
             </div>
 
-            <!-- Coding Videos -->
-            <div class="video-category" id="coding-videos">
-                <h3 class="category-title">💻 Coding Videos</h3>
-                <div class="videos-grid">
-                    <a href="https://www.youtube.com/watch?v=rfscVS0vtbw" target="_blank" class="video-card">
-                        <div class="video-thumbnail" style="background: linear-gradient(45deg, #3498db, #2980b9); display: flex; align-items: center; justify-content: center; color: white; font-size: 3rem; cursor: pointer; position: relative;">
-                            🐍
-                            <div class="play-button">▶️</div>
-                        </div>
-                        <h4>Python for Beginners</h4>
-                        <p>Start your coding journey with Python! Learn variables, loops, and fun programming concepts.</p>
-                        <div class="youtube-link">🎬 Watch on YouTube</div>
-                    </a>
-                    <a href="https://www.youtube.com/watch?v=UB1O30fR-EE" target="_blank" class="video-card">
-                        <div class="video-thumbnail" style="background: linear-gradient(45deg, #f39c12, #e67e22); display: flex; align-items: center; justify-content: center; color: white; font-size: 3rem; cursor: pointer; position: relative;">
-                            🌐
-                            <div class="play-button">▶️</div>
-                        </div>
-                        <h4>HTML Basics</h4>
-                        <p>Build your first website! Learn HTML tags, elements, and how to create web pages.</p>
-                        <div class="youtube-link">🎬 Watch on YouTube</div>
-                    </a>
-                    <a href="https://www.youtube.com/watch?v=W6NZfCO5SIk" target="_blank" class="video-card">
-                        <div class="video-thumbnail" style="background: linear-gradient(45deg, #f1c40f, #f39c12); display: flex; align-items: center; justify-content: center; color: white; font-size: 3rem; cursor: pointer; position: relative;">
-                            ✨
-                            <div class="play-button">▶️</div>
-                        </div>
-                        <h4>JavaScript Fun</h4>
-                        <p>Make your websites interactive! Learn JavaScript to add animations and cool effects.</p>
-                        <div class="youtube-link">🎬 Watch on YouTube</div>
-                    </a>
-                </div>
+            <div class="project-buttons">
+              <a
+                href="https://github.com/CodeCubCA/ai-chatbox-Ethan-CodeCub"
+                target="_blank"
+                class="btn btn-github"
+              >
+                <svg
+                  class="github-icon"
+                  viewBox="0 0 24 24"
+                  fill="currentColor"
+                >
+                  <path
+                    d="M12 0C5.374 0 0 5.373 0 12 0 17.302 3.438 21.8 8.207 23.387c.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23A11.509 11.509 0 0112 5.803c1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576C20.566 21.797 24 17.3 24 12c0-6.627-5.373-12-12-12z"
+                  />
+                </svg>
+                Repository
+              </a>
+              <a
+                href="https://ai-chatbox-ethan-codecub.onrender.com"
+                target="_blank"
+                class="btn btn-ai-live"
+              >
+                🤖 Try Live
+              </a>
             </div>
-
-            <!-- Math & Geometry Videos -->
-            <div class="video-category" id="math-videos">
-                <h3 class="category-title">🧮 Math & Geometry Videos</h3>
-                <div class="videos-grid">
-                    <a href="https://www.youtube.com/watch?v=XFDM1ip5HdU" target="_blank" class="video-card">
-                        <div class="video-thumbnail" style="background: linear-gradient(45deg, #e91e63, #ad1457); display: flex; align-items: center; justify-content: center; color: white; font-size: 3rem; cursor: pointer; position: relative;">
-                            💡
-                            <div class="play-button">▶️</div>
-                        </div>
-                        <h4>What does it feel like to invent math?</h4>
-                        <p>Discover the creative spark behind mathematical thinking! Experience the excitement of inventing new mathematical concepts.</p>
-                        <div class="youtube-link">🎬 Watch on YouTube</div>
-                    </a>
-                    <a href="https://www.youtube.com/watch?v=SwGbHsBAcZ0" target="_blank" class="video-card">
-                        <div class="video-thumbnail" style="background: linear-gradient(45deg, #00bcd4, #0097a7); display: flex; align-items: center; justify-content: center; color: white; font-size: 3rem; cursor: pointer; position: relative;">
-                            🌌
-                            <div class="play-button">▶️</div>
-                        </div>
-                        <h4>4 Dimension</h4>
-                        <p>Journey beyond our 3D world and explore the mind-bending concepts of the fourth dimension!</p>
-                        <div class="youtube-link">🎬 Watch on YouTube</div>
-                    </a>
-                    <a href="https://www.youtube.com/watch?v=_cr46G2K5Fo" target="_blank" class="video-card">
-                        <div class="video-thumbnail" style="background: linear-gradient(45deg, #607d8b, #455a64); display: flex; align-items: center; justify-content: center; color: white; font-size: 3rem; cursor: pointer; position: relative;">
-                            💥
-                            <div class="play-button">▶️</div>
-                        </div>
-                        <h4>A Man Who Broke Math</h4>
-                        <p>Discover the incredible story of a mathematician who challenged the very foundations of mathematics!</p>
-                        <div class="youtube-link">🎬 Watch on YouTube</div>
-                    </a>
-                </div>
-            </div>
+          </div>
         </div>
-
-        <!-- Projects Section -->
-        <div class="section projects-section" id="projects-section">
-            <h2 class="section-title">💻 My Projects</h2>
-            <p style="color: #666; margin-bottom: 2rem;">Check out the cool projects I've built! 🚀</p>
-
-            <div class="project-card mt-8">
-                <div class="project-screenshot">
-                    <div class="screenshot-container">
-                        <img src="img/profile.png" alt="Interactive Profile Website Screenshot" class="project-image">
-                    </div>
-                </div>
-
-                <div class="project-info">
-                    <h3 class="project-title">Interactive Profile Website</h3>
-                    <p class="project-description">
-                        A fully interactive profile website featuring real-time coding environments, mobile-optimized games, and an enhanced Python interpreter.
-                        Built with responsive design and includes features like Block Breaker with touch controls, Memory Game, and live code execution with support for imports, input(), and conditionals.
-                    </p>
-
-                    <div class="tech-stack">
-                        <span class="tech-badge html">HTML5</span>
-                        <span class="tech-badge css">CSS3</span>
-                        <span class="tech-badge js">JavaScript</span>
-                        <span class="tech-badge responsive">Responsive Design</span>
-                        <span class="tech-badge git">Git</span>
-                        <span class="tech-badge github">GitHub Pages</span>
-                    </div>
-
-                    <div class="project-buttons">
-                        <a href="https://github.com/CodeCubCA/profile-website-Ethan-CodeCub" target="_blank" class="btn btn-github">
-                            <svg class="github-icon" viewBox="0 0 24 24" fill="currentColor">
-                                <path d="M12 0C5.374 0 0 5.373 0 12 0 17.302 3.438 21.8 8.207 23.387c.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23A11.509 11.509 0 0112 5.803c1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576C20.566 21.797 24 17.3 24 12c0-6.627-5.373-12-12-12z"/>
-                            </svg>
-                            Repository
-                        </a>
-                        <a href="https://ethan.codecub.org" target="_blank" class="btn btn-live">
-                            🚀 Try Live
-                        </a>
-                    </div>
-                </div>
-            </div>
-
-            <!-- AI Chatbox Project -->
-            <div class="project-card ai-project mt-8">
-                <div class="project-screenshot ai-screenshot">
-                    <div class="screenshot-container ai-container">
-                        <img src="img/chatbox.png" alt="Study Buddy AI Assistant Screenshot" class="project-image">
-                    </div>
-                </div>
-
-                <div class="project-info">
-                    <h3 class="project-title ai-title">Study Buddy AI Assistant</h3>
-                    <p class="project-description">
-                        An intelligent AI-powered chatbot built with Streamlit and Groq API. Features real-time conversation, context awareness, and deployed to the cloud with CI/CD.
-                        Perfect for students seeking instant help with homework, explanations, and learning support across various subjects.
-                    </p>
-
-                    <div class="tech-stack">
-                        <span class="tech-badge python">Python</span>
-                        <span class="tech-badge streamlit">Streamlit</span>
-                        <span class="tech-badge groq">Groq API</span>
-                        <span class="tech-badge git">Git</span>
-                        <span class="tech-badge streamlit-cloud">Streamlit Cloud</span>
-                    </div>
-
-                    <div class="project-buttons">
-                        <a href="https://github.com/CodeCubCA/ai-chatbox-Ethan-CodeCub" target="_blank" class="btn btn-github">
-                            <svg class="github-icon" viewBox="0 0 24 24" fill="currentColor">
-                                <path d="M12 0C5.374 0 0 5.373 0 12 0 17.302 3.438 21.8 8.207 23.387c.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23A11.509 11.509 0 0112 5.803c1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576C20.566 21.797 24 17.3 24 12c0-6.627-5.373-12-12-12z"/>
-                            </svg>
-                            Repository
-                        </a>
-                        <a href="https://ai-chatbox-ethan-codecub.streamlit.app" target="_blank" class="btn btn-ai-live">
-                            🤖 Try Live
-                        </a>
-                    </div>
-                </div>
-            </div>
-        </div>
+      </div>
     </div>
 
     <!-- Coding Environments -->
     <div class="coding-environment" id="pythonEnvironment">
-        <div class="coding-container">
-            <div class="coding-header">
-                <h2 class="coding-title">🐍 Python Playground</h2>
-                <p class="coding-subtitle">Let's code some awesome Python!</p>
-                <button class="close-coding-btn" onclick="closeCodingEnvironment('pythonEnvironment')">×</button>
-            </div>
-
-            <div class="coding-content">
-                <div class="code-editor-section">
-                    <div class="editor-header">
-                        <h3>✏️ Python Code Editor</h3>
-                        <div class="editor-controls">
-                            <button class="run-btn" onclick="runPythonCode()">▶️ Run Code</button>
-                            <button class="clear-btn" onclick="clearPythonCode()">🗑️ Clear</button>
-                        </div>
-                    </div>
-                    <textarea class="code-editor" id="pythonCodeEditor" placeholder="Write your Python code here..."></textarea>
-                </div>
-
-                <div class="output-section">
-                    <div class="output-header">
-                        <h3>📱 Output Console</h3>
-                        <button class="clear-btn" onclick="clearPythonOutput()">🗑️ Clear Output</button>
-                    </div>
-                    <div class="code-output" id="pythonOutput">Ready to run your Python code! 🚀</div>
-                </div>
-            </div>
-
-            <div class="coding-examples">
-                <h3>🎯 Try These Examples:</h3>
-                <div class="example-buttons">
-                    <button class="example-btn" onclick="loadPythonExample('default')">👋 Hello World</button>
-                    <button class="example-btn" onclick="loadPythonExample('math')">🧮 Math Fun</button>
-                    <button class="example-btn" onclick="loadPythonExample('story')">📚 Story Time</button>
-                    <button class="example-btn" onclick="loadPythonExample('game')">🎮 Number Game</button>
-                </div>
-            </div>
+      <div class="coding-container">
+        <div class="coding-header">
+          <h2 class="coding-title">🐍 Python Playground</h2>
+          <p class="coding-subtitle">Let's code some awesome Python!</p>
+          <button
+            class="close-coding-btn"
+            onclick="closeCodingEnvironment('pythonEnvironment')"
+          >
+            ×
+          </button>
         </div>
+
+        <div class="coding-content">
+          <div class="code-editor-section">
+            <div class="editor-header">
+              <h3>✏️ Python Code Editor</h3>
+              <div class="editor-controls">
+                <button class="run-btn" onclick="runPythonCode()">
+                  ▶️ Run Code
+                </button>
+                <button class="clear-btn" onclick="clearPythonCode()">
+                  🗑️ Clear
+                </button>
+              </div>
+            </div>
+            <textarea
+              class="code-editor"
+              id="pythonCodeEditor"
+              placeholder="Write your Python code here..."
+            ></textarea>
+          </div>
+
+          <div class="output-section">
+            <div class="output-header">
+              <h3>📱 Output Console</h3>
+              <button class="clear-btn" onclick="clearPythonOutput()">
+                🗑️ Clear Output
+              </button>
+            </div>
+            <div class="code-output" id="pythonOutput">
+              Ready to run your Python code! 🚀
+            </div>
+          </div>
+        </div>
+
+        <div class="coding-examples">
+          <h3>🎯 Try These Examples:</h3>
+          <div class="example-buttons">
+            <button class="example-btn" onclick="loadPythonExample('default')">
+              👋 Hello World
+            </button>
+            <button class="example-btn" onclick="loadPythonExample('math')">
+              🧮 Math Fun
+            </button>
+            <button class="example-btn" onclick="loadPythonExample('story')">
+              📚 Story Time
+            </button>
+            <button class="example-btn" onclick="loadPythonExample('game')">
+              🎮 Number Game
+            </button>
+          </div>
+        </div>
+      </div>
     </div>
 
     <div class="coding-environment html-layout" id="htmlEnvironment">
-        <div class="coding-container">
-            <div class="coding-header">
-                <h2 class="coding-title">🌐 HTML Playground</h2>
-                <p class="coding-subtitle">Create amazing web pages!</p>
-                <button class="close-coding-btn" onclick="closeCodingEnvironment('htmlEnvironment')">×</button>
-            </div>
-
-            <div class="coding-content">
-                <div class="code-editor-section">
-                    <div class="editor-header">
-                        <h3>✏️ HTML Code Editor</h3>
-                        <div class="editor-controls">
-                            <button class="run-btn" onclick="updateHTMLPreview()">🔄 Update Preview</button>
-                            <button class="clear-btn" onclick="clearHTMLCode()">🗑️ Clear</button>
-                        </div>
-                    </div>
-                    <textarea class="code-editor" id="htmlCodeEditor" placeholder="Write your HTML code here..."></textarea>
-                </div>
-
-                <div class="preview-section">
-                    <div class="preview-header">
-                        <h3>👀 Live Preview</h3>
-                    </div>
-                    <iframe class="html-preview" id="htmlPreview" title="HTML Preview"></iframe>
-                </div>
-            </div>
-
-            <div class="coding-examples">
-                <h3>🎯 Try These Examples:</h3>
-                <div class="example-buttons">
-                    <button class="example-btn" onclick="loadHTMLExample('default')">👋 Basic Page</button>
-                    <button class="example-btn" onclick="loadHTMLExample('colorful')">🌈 Colorful Page</button>
-                    <button class="example-btn" onclick="loadHTMLExample('interactive')">🎮 Interactive</button>
-                    <button class="example-btn" onclick="loadHTMLExample('fun')">🎉 Super Fun</button>
-                </div>
-            </div>
+      <div class="coding-container">
+        <div class="coding-header">
+          <h2 class="coding-title">🌐 HTML Playground</h2>
+          <p class="coding-subtitle">Create amazing web pages!</p>
+          <button
+            class="close-coding-btn"
+            onclick="closeCodingEnvironment('htmlEnvironment')"
+          >
+            ×
+          </button>
         </div>
+
+        <div class="coding-content">
+          <div class="code-editor-section">
+            <div class="editor-header">
+              <h3>✏️ HTML Code Editor</h3>
+              <div class="editor-controls">
+                <button class="run-btn" onclick="updateHTMLPreview()">
+                  🔄 Update Preview
+                </button>
+                <button class="clear-btn" onclick="clearHTMLCode()">
+                  🗑️ Clear
+                </button>
+              </div>
+            </div>
+            <textarea
+              class="code-editor"
+              id="htmlCodeEditor"
+              placeholder="Write your HTML code here..."
+            ></textarea>
+          </div>
+
+          <div class="preview-section">
+            <div class="preview-header">
+              <h3>👀 Live Preview</h3>
+            </div>
+            <iframe
+              class="html-preview"
+              id="htmlPreview"
+              title="HTML Preview"
+            ></iframe>
+          </div>
+        </div>
+
+        <div class="coding-examples">
+          <h3>🎯 Try These Examples:</h3>
+          <div class="example-buttons">
+            <button class="example-btn" onclick="loadHTMLExample('default')">
+              👋 Basic Page
+            </button>
+            <button class="example-btn" onclick="loadHTMLExample('colorful')">
+              🌈 Colorful Page
+            </button>
+            <button
+              class="example-btn"
+              onclick="loadHTMLExample('interactive')"
+            >
+              🎮 Interactive
+            </button>
+            <button class="example-btn" onclick="loadHTMLExample('fun')">
+              🎉 Super Fun
+            </button>
+          </div>
+        </div>
+      </div>
     </div>
 
     <div class="coding-environment" id="jsEnvironment">
-        <div class="coding-container">
-            <div class="coding-header">
-                <h2 class="coding-title">✨ JavaScript Magic</h2>
-                <p class="coding-subtitle">Make your websites interactive!</p>
-                <button class="close-coding-btn" onclick="closeCodingEnvironment('jsEnvironment')">×</button>
-            </div>
-
-            <div class="coding-content">
-                <div class="code-editor-section">
-                    <div class="editor-header">
-                        <h3>✏️ JavaScript Code Editor</h3>
-                        <div class="editor-controls">
-                            <button class="run-btn" onclick="runJavaScriptCode()">▶️ Run Code</button>
-                            <button class="clear-btn" onclick="clearJavaScriptCode()">🗑️ Clear</button>
-                        </div>
-                    </div>
-                    <textarea class="code-editor" id="jsCodeEditor" placeholder="Write your JavaScript code here..."></textarea>
-                </div>
-
-                <div class="output-section">
-                    <div class="output-header">
-                        <h3>📱 Console Output</h3>
-                        <button class="clear-btn" onclick="clearJavaScriptOutput()">🗑️ Clear Output</button>
-                    </div>
-                    <div class="code-output" id="jsOutput">Ready to run your JavaScript code! ⚡</div>
-                </div>
-            </div>
-
-            <div class="coding-examples">
-                <h3>🎯 Try These Examples:</h3>
-                <div class="example-buttons">
-                    <button class="example-btn" onclick="loadJSExample('default')">👋 Hello World</button>
-                    <button class="example-btn" onclick="loadJSExample('calculator')">🧮 Calculator</button>
-                    <button class="example-btn" onclick="loadJSExample('colors')">🌈 Color Magic</button>
-                    <button class="example-btn" onclick="loadJSExample('animation')">🎬 Animation</button>
-                </div>
-            </div>
+      <div class="coding-container">
+        <div class="coding-header">
+          <h2 class="coding-title">✨ JavaScript Magic</h2>
+          <p class="coding-subtitle">Make your websites interactive!</p>
+          <button
+            class="close-coding-btn"
+            onclick="closeCodingEnvironment('jsEnvironment')"
+          >
+            ×
+          </button>
         </div>
+
+        <div class="coding-content">
+          <div class="code-editor-section">
+            <div class="editor-header">
+              <h3>✏️ JavaScript Code Editor</h3>
+              <div class="editor-controls">
+                <button class="run-btn" onclick="runJavaScriptCode()">
+                  ▶️ Run Code
+                </button>
+                <button class="clear-btn" onclick="clearJavaScriptCode()">
+                  🗑️ Clear
+                </button>
+              </div>
+            </div>
+            <textarea
+              class="code-editor"
+              id="jsCodeEditor"
+              placeholder="Write your JavaScript code here..."
+            ></textarea>
+          </div>
+
+          <div class="output-section">
+            <div class="output-header">
+              <h3>📱 Console Output</h3>
+              <button class="clear-btn" onclick="clearJavaScriptOutput()">
+                🗑️ Clear Output
+              </button>
+            </div>
+            <div class="code-output" id="jsOutput">
+              Ready to run your JavaScript code! ⚡
+            </div>
+          </div>
+        </div>
+
+        <div class="coding-examples">
+          <h3>🎯 Try These Examples:</h3>
+          <div class="example-buttons">
+            <button class="example-btn" onclick="loadJSExample('default')">
+              👋 Hello World
+            </button>
+            <button class="example-btn" onclick="loadJSExample('calculator')">
+              🧮 Calculator
+            </button>
+            <button class="example-btn" onclick="loadJSExample('colors')">
+              🌈 Color Magic
+            </button>
+            <button class="example-btn" onclick="loadJSExample('animation')">
+              🎬 Animation
+            </button>
+          </div>
+        </div>
+      </div>
     </div>
 
     <!-- Memory Game Modal -->
     <div class="memory-game-modal" id="memoryGameModal">
-        <div class="memory-game-container">
-            <div class="memory-game-header">
-                <h2>🧠 Memory Game</h2>
-                <button class="close-btn" onclick="closeMemoryGame()">×</button>
-            </div>
-            <div class="memory-game-stats">
-                <div class="stat">
-                    <span class="stat-label">Score:</span>
-                    <span class="stat-value" id="score">0</span>
-                </div>
-                <div class="stat">
-                    <span class="stat-label">Moves:</span>
-                    <span class="stat-value" id="moves">0</span>
-                </div>
-                <div class="stat">
-                    <span class="stat-label">Time:</span>
-                    <span class="stat-value" id="timer">0:00</span>
-                </div>
-            </div>
-            <div class="memory-game-board" id="gameBoard"></div>
-            <div class="memory-game-controls">
-                <button class="restart-btn" onclick="restartGame()">🔄 New Game</button>
-            </div>
+      <div class="memory-game-container">
+        <div class="memory-game-header">
+          <h2>🧠 Memory Game</h2>
+          <button class="close-btn" onclick="closeMemoryGame()">×</button>
         </div>
+        <div class="memory-game-stats">
+          <div class="stat">
+            <span class="stat-label">Score:</span>
+            <span class="stat-value" id="score">0</span>
+          </div>
+          <div class="stat">
+            <span class="stat-label">Moves:</span>
+            <span class="stat-value" id="moves">0</span>
+          </div>
+          <div class="stat">
+            <span class="stat-label">Time:</span>
+            <span class="stat-value" id="timer">0:00</span>
+          </div>
+        </div>
+        <div class="memory-game-board" id="gameBoard"></div>
+        <div class="memory-game-controls">
+          <button class="restart-btn" onclick="restartGame()">
+            🔄 New Game
+          </button>
+        </div>
+      </div>
     </div>
 
     <script src="script.js"></script>
-</body>
+  </body>
 </html>
