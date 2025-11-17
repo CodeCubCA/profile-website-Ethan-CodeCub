@@ -1937,13 +1937,60 @@ function startBlockGame() {
 
 function openFixComputer() {
     createGameModal('Fix the Computer', `
-        <div id="computerGame" style="width: 100%; height: 400px; background: linear-gradient(180deg, #1e3c72 0%, #2a5298 100%); position: relative; overflow: hidden; border-radius: 10px;">
-            <div id="computerScreen" style="width: 80%; height: 300px; background: #000; margin: 20px auto; border-radius: 10px; position: relative; border: 3px solid #333;">
-                <div id="computerScore" style="position: absolute; top: 10px; left: 10px; color: #00ff00; font-weight: bold;">Fixes: 0</div>
-                <div id="computerTimer" style="position: absolute; top: 10px; right: 10px; color: #00ff00; font-weight: bold;">Time: 60s</div>
-                <div id="taskDisplay" style="color: #00ff00; text-align: center; margin-top: 40px; font-family: monospace; padding: 20px;">
-                    <div>🖥️ COMPUTER REPAIR SYSTEM</div>
-                    <div style="margin-top: 20px; color: #ffff00;">CLICK ON ERRORS TO FIX THEM!</div>
+        <div id="computerGame" style="width: 100%; height: 500px; background: linear-gradient(180deg, #8B4513 0%, #A0522D 100%); position: relative; overflow: hidden; border-radius: 10px; padding: 20px;">
+            <div style="text-align: center; color: white; margin-bottom: 15px;">
+                <h3 style="margin: 0;">🔧 Computer Repair Shop</h3>
+                <p style="margin: 5px 0; font-size: 14px;">Drag computer parts to fix the broken computer!</p>
+                <div id="computerScore" style="font-weight: bold; font-size: 18px;">Parts Fixed: 0/6</div>
+            </div>
+
+            <div style="display: flex; gap: 20px; height: 380px;">
+                <!-- Broken Computer Area -->
+                <div id="computerArea" style="flex: 1; background: #333; border-radius: 10px; position: relative; border: 3px dashed #666;">
+                    <div style="text-align: center; color: #fff; padding: 10px; background: rgba(0,0,0,0.5);">
+                        💻 Broken Computer
+                    </div>
+                    <div id="dropZones" style="padding: 20px;">
+                        <div class="drop-zone" data-part="cpu" style="width: 80px; height: 80px; border: 2px dashed #ff6b6b; border-radius: 5px; margin: 10px auto; display: flex; align-items: center; justify-content: center; background: rgba(255,107,107,0.1); color: #ff6b6b; font-size: 12px; text-align: center;">CPU<br>Slot</div>
+                        <div class="drop-zone" data-part="ram" style="width: 120px; height: 60px; border: 2px dashed #4ecdc4; border-radius: 5px; margin: 10px auto; display: flex; align-items: center; justify-content: center; background: rgba(78,205,196,0.1); color: #4ecdc4; font-size: 12px; text-align: center;">RAM<br>Slot</div>
+                        <div class="drop-zone" data-part="gpu" style="width: 100px; height: 70px; border: 2px dashed #95e1d3; border-radius: 5px; margin: 10px auto; display: flex; align-items: center; justify-content: center; background: rgba(149,225,211,0.1); color: #95e1d3; font-size: 12px; text-align: center;">GPU<br>Slot</div>
+                        <div style="display: flex; gap: 10px; justify-content: center; margin-top: 10px;">
+                            <div class="drop-zone" data-part="hdd" style="width: 70px; height: 50px; border: 2px dashed #f38181; border-radius: 5px; display: flex; align-items: center; justify-content: center; background: rgba(243,129,129,0.1); color: #f38181; font-size: 11px; text-align: center;">HDD</div>
+                            <div class="drop-zone" data-part="psu" style="width: 70px; height: 50px; border: 2px dashed #feca57; border-radius: 5px; display: flex; align-items: center; justify-content: center; background: rgba(254,202,87,0.1); color: #feca57; font-size: 11px; text-align: center;">PSU</div>
+                            <div class="drop-zone" data-part="fan" style="width: 70px; height: 50px; border: 2px dashed #a29bfe; border-radius: 5px; display: flex; align-items: center; justify-content: center; background: rgba(162,155,254,0.1); color: #a29bfe; font-size: 11px; text-align: center;">FAN</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Parts Table Area -->
+                <div style="flex: 1; background: #8B6914; border-radius: 10px; padding: 15px; border: 3px solid #654321;">
+                    <div style="text-align: center; color: white; margin-bottom: 15px;">🔩 Computer Parts</div>
+                    <div id="partsArea" style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+                        <div class="computer-part" draggable="true" data-part="cpu" style="background: #ff6b6b; padding: 15px; border-radius: 8px; text-align: center; cursor: move; box-shadow: 0 4px 6px rgba(0,0,0,0.3);">
+                            <div style="font-size: 30px;">🧠</div>
+                            <div style="font-size: 12px; color: white; font-weight: bold;">CPU</div>
+                        </div>
+                        <div class="computer-part" draggable="true" data-part="ram" style="background: #4ecdc4; padding: 15px; border-radius: 8px; text-align: center; cursor: move; box-shadow: 0 4px 6px rgba(0,0,0,0.3);">
+                            <div style="font-size: 30px;">💾</div>
+                            <div style="font-size: 12px; color: white; font-weight: bold;">RAM</div>
+                        </div>
+                        <div class="computer-part" draggable="true" data-part="gpu" style="background: #95e1d3; padding: 15px; border-radius: 8px; text-align: center; cursor: move; box-shadow: 0 4px 6px rgba(0,0,0,0.3);">
+                            <div style="font-size: 30px;">🎮</div>
+                            <div style="font-size: 12px; color: white; font-weight: bold;">GPU</div>
+                        </div>
+                        <div class="computer-part" draggable="true" data-part="hdd" style="background: #f38181; padding: 15px; border-radius: 8px; text-align: center; cursor: move; box-shadow: 0 4px 6px rgba(0,0,0,0.3);">
+                            <div style="font-size: 30px;">💿</div>
+                            <div style="font-size: 12px; color: white; font-weight: bold;">HDD</div>
+                        </div>
+                        <div class="computer-part" draggable="true" data-part="psu" style="background: #feca57; padding: 15px; border-radius: 8px; text-align: center; cursor: move; box-shadow: 0 4px 6px rgba(0,0,0,0.3);">
+                            <div style="font-size: 30px;">⚡</div>
+                            <div style="font-size: 12px; color: white; font-weight: bold;">PSU</div>
+                        </div>
+                        <div class="computer-part" draggable="true" data-part="fan" style="background: #a29bfe; padding: 15px; border-radius: 8px; text-align: center; cursor: move; box-shadow: 0 4px 6px rgba(0,0,0,0.3);">
+                            <div style="font-size: 30px;">🌀</div>
+                            <div style="font-size: 12px; color: white; font-weight: bold;">FAN</div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -1951,169 +1998,148 @@ function openFixComputer() {
 }
 
 function startComputerGame() {
-    let computerScore = 0;
-    let timeLeft = 60;
-    let gameRunning = true;
-    const gameArea = document.getElementById('computerScreen');
+    let partsFixed = 0;
+    const totalParts = 6;
     const scoreDisplay = document.getElementById('computerScore');
-    const timerDisplay = document.getElementById('computerTimer');
-    const taskDisplay = document.getElementById('taskDisplay');
+    const parts = document.querySelectorAll('.computer-part');
+    const dropZones = document.querySelectorAll('.drop-zone');
 
-    const errorTypes = [
-        { icon: '❌', name: 'System Error', points: 10 },
-        { icon: '⚠️', name: 'Warning', points: 5 },
-        { icon: '🔥', name: 'Critical Bug', points: 20 },
-        { icon: '🐛', name: 'Software Bug', points: 15 },
-        { icon: '⛔', name: 'Access Denied', points: 12 },
-        { icon: '💀', name: 'Fatal Error', points: 25 },
-        { icon: '🚫', name: 'Connection Failed', points: 8 }
-    ];
+    let draggedElement = null;
 
-    const computerTasks = [
-        'Installing security updates...',
-        'Scanning for viruses...',
-        'Cleaning temporary files...',
-        'Updating drivers...',
-        'Optimizing system performance...',
-        'Fixing registry errors...',
-        'Backing up important files...',
-        'Running diagnostic tests...'
-    ];
-
-    let currentTaskIndex = 0;
-
-    // Update timer
-    const timerInterval = setInterval(() => {
-        if (!gameRunning) {
-            clearInterval(timerInterval);
-            return;
-        }
-
-        timeLeft--;
-        timerDisplay.textContent = `Time: ${timeLeft}s`;
-
-        if (timeLeft <= 0) {
-            gameRunning = false;
-            alert(`💻 Time's up! You fixed ${computerScore} errors! Great job!`);
-            clearInterval(timerInterval);
-        }
-    }, 1000);
-
-    // Update task display
-    const taskInterval = setInterval(() => {
-        if (!gameRunning) {
-            clearInterval(taskInterval);
-            return;
-        }
-
-        currentTaskIndex = (currentTaskIndex + 1) % computerTasks.length;
-        taskDisplay.innerHTML = `
-            <div>🖥️ COMPUTER REPAIR SYSTEM</div>
-            <div style="margin-top: 20px; color: #ffff00;">CLICK ON ERRORS TO FIX THEM!</div>
-            <div style="margin-top: 15px; color: #00ffff; font-size: 14px;">${computerTasks[currentTaskIndex]}</div>
-        `;
-    }, 3000);
-
-    // Create computer errors
-    function createError() {
-        if (!gameRunning) return;
-
-        const errorType = errorTypes[Math.floor(Math.random() * errorTypes.length)];
-        const error = document.createElement('div');
-        error.innerHTML = errorType.icon;
-        error.title = errorType.name;
-
-        error.style.cssText = `
-            position: absolute;
-            top: ${Math.random() * 200 + 50}px;
-            left: ${Math.random() * (gameArea.offsetWidth - 100) + 50}px;
-            font-size: 25px;
-            cursor: pointer;
-            animation: pulse 1s infinite;
-            z-index: 100;
-        `;
-
-        error.addEventListener('click', () => {
-            computerScore += errorType.points;
-            scoreDisplay.textContent = `Fixes: ${computerScore}`;
-
-            // Create fix animation
-            const fixAnimation = document.createElement('div');
-            fixAnimation.innerHTML = '✅';
-            fixAnimation.style.cssText = `
-                position: absolute;
-                top: ${error.style.top};
-                left: ${error.style.left};
-                font-size: 20px;
-                color: #00ff00;
-                pointer-events: none;
-                animation: fixPulse 0.5s ease-out;
-            `;
-
-            gameArea.appendChild(fixAnimation);
-            setTimeout(() => fixAnimation.remove(), 500);
-
-            // Remove error
-            error.remove();
-
-            // Add bonus message
-            const bonus = document.createElement('div');
-            bonus.innerHTML = `+${errorType.points}`;
-            bonus.style.cssText = `
-                position: absolute;
-                top: ${parseInt(error.style.top) - 20}px;
-                left: ${error.style.left};
-                color: #ffff00;
-                font-weight: bold;
-                pointer-events: none;
-                animation: scoreFloat 1s ease-out;
-            `;
-            gameArea.appendChild(bonus);
-            setTimeout(() => bonus.remove(), 1000);
+    // Drag start
+    parts.forEach(part => {
+        part.addEventListener('dragstart', (e) => {
+            draggedElement = e.target;
+            e.target.style.opacity = '0.5';
         });
 
-        gameArea.appendChild(error);
+        part.addEventListener('dragend', (e) => {
+            e.target.style.opacity = '1';
+        });
 
-        // Auto-remove error after 5 seconds if not clicked
-        setTimeout(() => {
-            if (error.parentNode) {
-                error.remove();
+        // Touch support for mobile
+        part.addEventListener('touchstart', (e) => {
+            draggedElement = e.target;
+            const touch = e.touches[0];
+            const clone = e.target.cloneNode(true);
+            clone.style.position = 'fixed';
+            clone.style.top = touch.clientY - 40 + 'px';
+            clone.style.left = touch.clientX - 40 + 'px';
+            clone.style.opacity = '0.8';
+            clone.style.pointerEvents = 'none';
+            clone.id = 'dragging-clone';
+            clone.style.zIndex = '1000';
+            document.body.appendChild(clone);
+        });
+
+        part.addEventListener('touchmove', (e) => {
+            e.preventDefault();
+            const touch = e.touches[0];
+            const clone = document.getElementById('dragging-clone');
+            if (clone) {
+                clone.style.top = touch.clientY - 40 + 'px';
+                clone.style.left = touch.clientX - 40 + 'px';
             }
-        }, 5000);
-    }
+        });
 
-    // Create errors every 1.5 seconds
-    const errorInterval = setInterval(createError, 1500);
+        part.addEventListener('touchend', (e) => {
+            const clone = document.getElementById('dragging-clone');
+            if (clone) {
+                const touch = e.changedTouches[0];
+                const dropTarget = document.elementFromPoint(touch.clientX, touch.clientY);
+
+                if (dropTarget && dropTarget.classList.contains('drop-zone')) {
+                    const partType = draggedElement.getAttribute('data-part');
+                    const zoneType = dropTarget.getAttribute('data-part');
+
+                    if (partType === zoneType && !dropTarget.classList.contains('filled')) {
+                        handleDrop(dropTarget, draggedElement);
+                    }
+                }
+                clone.remove();
+            }
+        });
+    });
+
+    // Drop zones
+    dropZones.forEach(zone => {
+        zone.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            zone.style.borderColor = '#00ff00';
+            zone.style.background = 'rgba(0,255,0,0.2)';
+        });
+
+        zone.addEventListener('dragleave', (e) => {
+            zone.style.borderColor = '';
+            zone.style.background = '';
+        });
+
+        zone.addEventListener('drop', (e) => {
+            e.preventDefault();
+            zone.style.borderColor = '';
+            zone.style.background = '';
+
+            if (draggedElement) {
+                const partType = draggedElement.getAttribute('data-part');
+                const zoneType = zone.getAttribute('data-part');
+
+                if (partType === zoneType && !zone.classList.contains('filled')) {
+                    handleDrop(zone, draggedElement);
+                }
+            }
+        });
+    });
+
+    function handleDrop(zone, part) {
+        // Mark zone as filled
+        zone.classList.add('filled');
+
+        // Update zone appearance
+        const partIcon = part.querySelector('div').innerHTML;
+        zone.innerHTML = `<div style="font-size: 40px;">${partIcon}</div>`;
+        zone.style.border = '3px solid #00ff00';
+        zone.style.background = 'rgba(0,255,0,0.3)';
+
+        // Remove part from parts area
+        part.style.visibility = 'hidden';
+
+        // Update score
+        partsFixed++;
+        scoreDisplay.textContent = `Parts Fixed: ${partsFixed}/${totalParts}`;
+
+        // Success animation
+        const success = document.createElement('div');
+        success.innerHTML = '✅';
+        success.style.cssText = `
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 60px;
+            animation: successPop 0.6s ease-out;
+            pointer-events: none;
+        `;
+        zone.appendChild(success);
+        setTimeout(() => success.remove(), 600);
+
+        // Check if all parts are fixed
+        if (partsFixed === totalParts) {
+            setTimeout(() => {
+                alert('🎉 Amazing! You fixed the computer! All parts installed successfully!');
+            }, 500);
+        }
+    }
 
     // Add CSS animations
     const style = document.createElement('style');
     style.textContent = `
-        @keyframes pulse {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.1); }
-        }
-        @keyframes fixPulse {
-            0% { transform: scale(1); opacity: 1; }
-            100% { transform: scale(1.5); opacity: 0; }
-        }
-        @keyframes scoreFloat {
-            0% { transform: translateY(0); opacity: 1; }
-            100% { transform: translateY(-30px); opacity: 0; }
+        @keyframes successPop {
+            0% { transform: translate(-50%, -50%) scale(0); opacity: 0; }
+            50% { transform: translate(-50%, -50%) scale(1.2); opacity: 1; }
+            100% { transform: translate(-50%, -50%) scale(1); opacity: 0; }
         }
     `;
     document.head.appendChild(style);
-
-    // Stop game after 60 seconds
-    setTimeout(() => {
-        if (gameRunning) {
-            gameRunning = false;
-            alert(`💻 Computer fixed! You resolved ${computerScore} errors! Excellent work!`);
-        }
-        clearInterval(errorInterval);
-        clearInterval(timerInterval);
-        clearInterval(taskInterval);
-        style.remove();
-    }, 60000);
 }
 
 function openCollectCoins() {
