@@ -2345,6 +2345,9 @@ function startComputerGame() {
                 <div style="font-size: 28px;">${part.icon}</div>
             `;
 
+            // Add tooltip/title attribute to show part name on hover
+            partDiv.title = part.name;
+
             // Drag events
             partDiv.addEventListener('dragstart', (e) => {
                 draggedPart = part.id;
