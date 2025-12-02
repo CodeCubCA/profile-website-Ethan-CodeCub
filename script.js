@@ -2123,21 +2123,21 @@ function openFixComputer() {
     createGameModal('Fix the Computer', `
         <div id="computerGame" style="width: 100%; height: 550px; background: linear-gradient(180deg, #2c3e50 0%, #34495e 100%); position: relative; overflow: hidden; border-radius: 10px; padding: 20px;">
             <!-- Initial Screen: Closed Computer -->
-            <div id="startScreen" style="text-align: center; height: 100%;">
-                <h2 style="color: white; margin-bottom: 20px;">🔧 Computer Repair Shop</h2>
-                <p style="color: #ecf0f1; margin-bottom: 30px;">A customer brought in a broken computer. Open it and fix the broken parts before time runs out!</p>
+            <div id="startScreen" style="text-align: center; height: 100%; display: flex; flex-direction: column; justify-content: center; align-items: center;">
+                <h2 style="color: white; margin-bottom: 15px; margin-top: 0;">🔧 Computer Repair Shop</h2>
+                <p style="color: #ecf0f1; margin-bottom: 20px; font-size: 14px;">A customer brought in a broken computer. Open it and fix the broken parts before time runs out!</p>
 
-                <div style="margin: 30px auto; width: 300px; height: 250px; background: linear-gradient(145deg, #555, #222); border-radius: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); position: relative; border: 3px solid #333;">
-                    <div style="position: absolute; top: 10px; right: 10px; font-size: 80px;">💻</div>
-                    <div style="position: absolute; bottom: 20px; left: 50%; transform: translateX(-50%); color: #7f8c8d; font-size: 14px;">Dell OptiPlex 7090</div>
+                <div style="margin: 15px auto; width: 250px; height: 180px; background: linear-gradient(145deg, #555, #222); border-radius: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); position: relative; border: 3px solid #333;">
+                    <div style="position: absolute; top: 10px; right: 10px; font-size: 60px;">💻</div>
+                    <div style="position: absolute; bottom: 15px; left: 50%; transform: translateX(-50%); color: #7f8c8d; font-size: 12px;">Dell OptiPlex 7090</div>
                 </div>
 
-                <div style="margin: 20px auto; width: 200px; height: 80px; background: linear-gradient(145deg, #8B4513, #654321); border-radius: 10px; box-shadow: 0 5px 15px rgba(0,0,0,0.4); position: relative; border: 2px solid #A0522D;">
-                    <div style="text-align: center; padding-top: 10px; color: #fff; font-weight: bold;">🧰 Toolbox</div>
-                    <div style="text-align: center; font-size: 30px;">🔧 🪛</div>
+                <div style="margin: 15px auto; width: 180px; height: 70px; background: linear-gradient(145deg, #8B4513, #654321); border-radius: 10px; box-shadow: 0 5px 15px rgba(0,0,0,0.4); position: relative; border: 2px solid #A0522D;">
+                    <div style="text-align: center; padding-top: 8px; color: #fff; font-weight: bold; font-size: 13px;">🧰 Toolbox</div>
+                    <div style="text-align: center; font-size: 26px;">🔧 🪛</div>
                 </div>
 
-                <button id="openComputerBtn" style="margin-top: 30px; padding: 15px 40px; font-size: 18px; background: linear-gradient(145deg, #27ae60, #229954); color: white; border: none; border-radius: 10px; cursor: pointer; font-weight: bold; box-shadow: 0 5px 15px rgba(39,174,96,0.4); transition: transform 0.2s;">
+                <button id="openComputerBtn" style="margin-top: 20px; padding: 15px 40px; font-size: 18px; background: linear-gradient(145deg, #27ae60, #229954); color: white; border: none; border-radius: 10px; cursor: pointer; font-weight: bold; box-shadow: 0 5px 15px rgba(39,174,96,0.4); transition: transform 0.2s;">
                     🔓 Open Computer & Start Repair
                 </button>
             </div>
