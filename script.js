@@ -36,7 +36,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 case 'Memory Game':
                     openMemoryGame();
                     break;
-                case 'Laser Plane Shooter':
+                case 'Plane Laser Shooter':
                     openPlaneLaserShooter();
                     break;
                 case 'Math Challenge':
@@ -92,12 +92,6 @@ function openJavaScriptEnvironment() {
     document.getElementById('jsEnvironment').style.display = 'flex';
 }
 
-function openCSSEnvironment() {
-    document.getElementById('cssEnvironment').style.display = 'flex';
-    // Auto-update preview
-    setTimeout(() => updateCSSPreview(), 500);
-}
-
 function closeCodingEnvironment(environmentId) {
     document.getElementById(environmentId).style.display = 'none';
 }
@@ -107,123 +101,64 @@ function runPythonCode() {
     const code = document.getElementById('pythonCodeEditor').value;
     const output = document.getElementById('pythonOutput');
 
-    // Enhanced Python interpreter simulation
+    // Simple Python interpreter simulation
     try {
         let result = '';
         const lines = code.split('\n');
-        const variables = {}; // Store variables
-        const imports = {}; // Store imported modules
-        let skipUntil = -1; // For handling if/else blocks
-        let conditionMet = false; // Track if condition was satisfied
 
-        for (let i = 0; i < lines.length; i++) {
-            if (i <= skipUntil) continue; // Skip lines in if/else blocks that were already processed
-
-            let line = lines[i].trim();
+        for (let line of lines) {
+            line = line.trim();
             if (line === '' || line.startsWith('#')) continue;
 
-            // Handle import statements
-            if (line.startsWith('from ') && line.includes(' import ')) {
-                const importMatch = line.match(/from\s+(\w+)\s+import\s+(.+)/);
-                if (importMatch) {
-                    const module = importMatch[1];
-                    const items = importMatch[2].split(',').map(item => item.trim());
-
-                    if (module === 'random') {
-                        imports.randint = function(min, max) {
-                            return Math.floor(Math.random() * (max - min + 1)) + min;
-                        };
-                    }
+            // Handle print statements
+            const printMatch = line.match(/print\((.+)\)/);
+            if (printMatch) {
+                let printContent = printMatch[1];
+                // Handle f-strings
+                if (printContent.startsWith('f"') && printContent.endsWith('"')) {
+                    printContent = printContent.slice(2, -1);
+                    // Simple f-string processing
+                    printContent = printContent.replace(/\{([^}]+)\}/g, (match, expr) => {
+                        if (expr.includes('+')) {
+                            const parts = expr.split('+');
+                            if (parts.length === 2 && parts[1].trim() === '1') {
+                                return '{number}'; // placeholder for loop
+                            }
+                        }
+                        return expr;
+                    });
                 }
-                continue;
+                // Handle regular strings
+                else if (printContent.startsWith('"') && printContent.endsWith('"')) {
+                    printContent = printContent.slice(1, -1);
+                }
+                result += printContent + '\n';
             }
 
-            // Handle variable assignments
-            const assignMatch = line.match(/^(\w+)\s*=\s*(.+)$/);
-            if (assignMatch) {
-                const varName = assignMatch[1];
-                let varValue = assignMatch[2].trim();
-
-                // Handle function calls like randint(1, 10)
-                if (varValue.includes('randint(')) {
-                    const randMatch = varValue.match(/randint\((\d+),\s*(\d+)\)/);
-                    if (randMatch && imports.randint) {
-                        varValue = imports.randint(parseInt(randMatch[1]), parseInt(randMatch[2]));
-                    }
-                }
-                // Handle input() function
-                else if (varValue.includes('input(')) {
-                    const inputMatch = varValue.match(/input\("(.+)"\)/);
-                    if (inputMatch) {
-                        // Simulate user input - for demo, we'll use a random guess
-                        const randomGuess = Math.floor(Math.random() * 10) + 1;
-                        result += `${inputMatch[1]} ${randomGuess}\n`;
-                        varValue = randomGuess;
-                    }
-                }
-                // Handle string values
-                else if (varValue.startsWith('"') && varValue.endsWith('"')) {
-                    varValue = varValue.slice(1, -1);
-                } else if (varValue.startsWith("'") && varValue.endsWith("'")) {
-                    varValue = varValue.slice(1, -1);
-                } else if (!isNaN(varValue)) {
-                    // Handle numeric values
-                    varValue = parseFloat(varValue);
-                }
-
-                variables[varName] = varValue;
-                continue;
-            }
-
-            // Handle if statements
-            const ifMatch = line.match(/^if\s+(.+):/);
-            if (ifMatch) {
-                const condition = ifMatch[1];
-                conditionMet = evaluateCondition(condition, variables);
-
-                // Find the else block if it exists
-                let elseIndex = -1;
-                for (let j = i + 1; j < lines.length; j++) {
-                    if (lines[j].trim().startsWith('else:')) {
-                        elseIndex = j;
-                        break;
-                    }
-                    if (lines[j].trim() && !lines[j].startsWith('    ')) {
-                        break; // End of if block
-                    }
-                }
-
-                if (conditionMet) {
-                    // Execute if block
-                    for (let j = i + 1; j < lines.length; j++) {
-                        if (lines[j].trim() === 'else:') break;
-                        if (lines[j].trim() && !lines[j].startsWith('    ')) break;
-
-                        if (lines[j].startsWith('    ')) {
-                            const blockLine = lines[j].trim();
-                            result += executeStatement(blockLine, variables);
+            // Handle simple for loops
+            const forMatch = line.match(/for\s+(\w+)\s+in\s+range\((\d+)\):/);
+            if (forMatch) {
+                const variable = forMatch[1];
+                const range = parseInt(forMatch[2]);
+                // Look for the next line (print statement in loop)
+                const nextLineIndex = lines.indexOf(line) + 1;
+                if (nextLineIndex < lines.length) {
+                    const nextLine = lines[nextLineIndex].trim();
+                    const loopPrintMatch = nextLine.match(/print\((.+)\)/);
+                    if (loopPrintMatch) {
+                        let loopContent = loopPrintMatch[1];
+                        for (let i = 0; i < range; i++) {
+                            let output = loopContent;
+                            if (output.startsWith('f"') && output.endsWith('"')) {
+                                output = output.slice(2, -1);
+                                output = output.replace(new RegExp(`\\{${variable}\\+1\\}`, 'g'), i + 1);
+                                output = output.replace(new RegExp(`\\{${variable}\\}`, 'g'), i);
+                            }
+                            result += output + '\n';
                         }
                     }
-                    skipUntil = elseIndex > -1 ? findEndOfElse(lines, elseIndex) : findEndOfIf(lines, i);
-                } else if (elseIndex > -1) {
-                    // Execute else block
-                    for (let j = elseIndex + 1; j < lines.length; j++) {
-                        if (lines[j].trim() && !lines[j].startsWith('    ')) break;
-
-                        if (lines[j].startsWith('    ')) {
-                            const blockLine = lines[j].trim();
-                            result += executeStatement(blockLine, variables);
-                        }
-                    }
-                    skipUntil = findEndOfElse(lines, elseIndex);
-                } else {
-                    skipUntil = findEndOfIf(lines, i);
                 }
-                continue;
             }
-
-            // Handle regular statements
-            result += executeStatement(line, variables);
         }
 
         if (result === '') {
@@ -234,110 +169,6 @@ function runPythonCode() {
     } catch (error) {
         output.innerHTML = `<span style="color: #ff6b6b;">❌ Oops! There's an error:</span>\n${error.message}`;
     }
-}
-
-function evaluateCondition(condition, variables) {
-    // Handle simple equality comparisons
-    const eqMatch = condition.match(/(\w+)\s*==\s*(\w+)/);
-    if (eqMatch) {
-        const left = variables[eqMatch[1]] !== undefined ? variables[eqMatch[1]] : eqMatch[1];
-        const right = variables[eqMatch[2]] !== undefined ? variables[eqMatch[2]] : eqMatch[2];
-        return left == right;
-    }
-    return false;
-}
-
-function executeStatement(line, variables) {
-    let result = '';
-
-    // Handle print statements
-    const printMatch = line.match(/print\((.+)\)/);
-    if (printMatch) {
-        let printContent = printMatch[1];
-
-        // Handle f-strings
-        if (printContent.startsWith('f"') || printContent.startsWith("f'")) {
-            // Extract the f-string content
-            const fStringContent = printContent.slice(2, -1);
-
-            // Replace {expression} with evaluated values
-            let output = fStringContent.replace(/\{([^}]+)\}/g, (match, expression) => {
-                expression = expression.trim();
-
-                // Handle simple expressions like i+1, i-1, etc.
-                if (expression.includes('+')) {
-                    const parts = expression.split('+');
-                    const left = variables[parts[0].trim()] || parts[0].trim();
-                    const right = parseInt(parts[1].trim());
-                    return (parseInt(left) + right);
-                } else if (expression.includes('-')) {
-                    const parts = expression.split('-');
-                    const left = variables[parts[0].trim()] || parts[0].trim();
-                    const right = parseInt(parts[1].trim());
-                    return (parseInt(left) - right);
-                } else if (expression.includes('*')) {
-                    const parts = expression.split('*');
-                    const left = variables[parts[0].trim()] || parts[0].trim();
-                    const right = parseInt(parts[1].trim());
-                    return (parseInt(left) * right);
-                }
-                // Handle simple variable references
-                else if (variables.hasOwnProperty(expression)) {
-                    return variables[expression];
-                }
-                return expression;
-            });
-
-            result += output + '\n';
-        }
-        // Handle string concatenation with +
-        else if (printContent.includes(' + ')) {
-            const parts = printContent.split(' + ');
-            let output = '';
-            for (let part of parts) {
-                part = part.trim();
-                if (part.startsWith('"') && part.endsWith('"')) {
-                    output += part.slice(1, -1);
-                } else if (variables.hasOwnProperty(part)) {
-                    output += variables[part];
-                } else {
-                    output += part;
-                }
-            }
-            result += output + '\n';
-        }
-        // Handle regular strings
-        else if (printContent.startsWith('"') && printContent.endsWith('"')) {
-            result += printContent.slice(1, -1) + '\n';
-        }
-        // Handle variables
-        else if (variables.hasOwnProperty(printContent)) {
-            result += variables[printContent] + '\n';
-        }
-        else {
-            result += printContent + '\n';
-        }
-    }
-
-    return result;
-}
-
-function findEndOfIf(lines, startIndex) {
-    for (let i = startIndex + 1; i < lines.length; i++) {
-        if (lines[i].trim() && !lines[i].startsWith('    ') && !lines[i].trim().startsWith('else:')) {
-            return i - 1;
-        }
-    }
-    return lines.length - 1;
-}
-
-function findEndOfElse(lines, elseIndex) {
-    for (let i = elseIndex + 1; i < lines.length; i++) {
-        if (lines[i].trim() && !lines[i].startsWith('    ')) {
-            return i - 1;
-        }
-    }
-    return lines.length - 1;
 }
 
 function loadPythonExample(type = 'default') {
@@ -627,11 +458,10 @@ for(let i = 0; i < colors.length; i++) {
 }
 
 // Pick a random color
-let randomIndex = Math.floor(Math.random() *
-colors.length);
+let randomIndex = Math.floor(Math.random() * colors.length);
 let selectedColor = colors[randomIndex];
 
-console.log("🎯 Random color selected: " + selectedColor);
+console.log("\n🎯 Random color selected: " + selectedColor);
 alert("Your random color is: " + selectedColor + "!");`
     };
 
@@ -647,7 +477,7 @@ for(let i = 5; i >= 1; i--) {
 console.log("🎉 Blast off!");
 
 // Fun with loops and patterns
-console.log("✨ Creating a pattern:");
+console.log("\n✨ Creating a pattern:");
 for(let i = 1; i <= 5; i++) {
     let stars = "";
     for(let j = 1; j <= i; j++) {
@@ -660,10 +490,6 @@ alert("🎊 Animation complete!");`;
     } else {
         editor.value = examples[type] || examples.default;
     }
-    // Auto-run the code after loading example
-    if (type !== 'default') {
-        setTimeout(() => runJavaScriptCode(), 100);
-    }
 }
 
 function clearJavaScriptCode() {
@@ -673,149 +499,6 @@ function clearJavaScriptCode() {
 
 function clearJavaScriptOutput() {
     document.getElementById('jsOutput').textContent = 'Click "Run Code" to see your JavaScript magic! ⚡';
-}
-
-// CSS Environment Functions
-function updateCSSPreview() {
-    const cssCode = document.getElementById('cssCodeEditor').value;
-    const preview = document.getElementById('cssPreview');
-
-    const htmlContent = `
-        <!DOCTYPE html>
-        <html>
-        <head>
-            <style>
-                body { margin: 20px; font-family: Arial, sans-serif; }
-                ${cssCode}
-            </style>
-        </head>
-        <body>
-            <div class="box">Box 1</div>
-            <div class="box">Box 2</div>
-            <div class="box">Box 3</div>
-            <p class="text">This is sample text</p>
-            <button class="btn">Button</button>
-        </body>
-        </html>
-    `;
-
-    preview.srcdoc = htmlContent;
-}
-
-function loadCSSExample(type = 'default') {
-    const editor = document.getElementById('cssCodeEditor');
-
-    const examples = {
-        default: `/* Colorful Boxes */
-.box {
-    width: 150px;
-    height: 100px;
-    margin: 10px;
-    padding: 20px;
-    border-radius: 10px;
-    text-align: center;
-    color: white;
-    font-weight: bold;
-}
-
-.box:nth-child(1) {
-    background-color: #ff6b6b;
-}
-
-.box:nth-child(2) {
-    background-color: #4ecdc4;
-}
-
-.box:nth-child(3) {
-    background-color: #45b7d1;
-}`,
-        gradient: `/* Beautiful Gradients */
-.box {
-    width: 200px;
-    height: 120px;
-    margin: 15px;
-    border-radius: 15px;
-    display: inline-block;
-}
-
-.box:nth-child(1) {
-    background: linear-gradient(45deg, #ff6b6b, #feca57);
-}
-
-.box:nth-child(2) {
-    background: linear-gradient(135deg, #667eea, #764ba2);
-}
-
-.box:nth-child(3) {
-    background: linear-gradient(to right, #11998e, #38ef7d);
-}`,
-        animation: `/* Cool Animations */
-@keyframes bounce {
-    0%, 100% { transform: translateY(0); }
-    50% { transform: translateY(-30px); }
-}
-
-@keyframes pulse {
-    0%, 100% { transform: scale(1); }
-    50% { transform: scale(1.1); }
-}
-
-.box {
-    width: 100px;
-    height: 100px;
-    margin: 20px;
-    background: linear-gradient(45deg, #f093fb, #f5576c);
-    border-radius: 15px;
-    display: inline-block;
-    animation: bounce 2s infinite;
-}
-
-.btn {
-    animation: pulse 1.5s infinite;
-    background: #4ecdc4;
-    border: none;
-    padding: 15px 30px;
-    border-radius: 25px;
-    color: white;
-    font-size: 16px;
-    cursor: pointer;
-}`,
-        flexbox: `/* Flexbox Layout */
-body {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    align-items: center;
-    min-height: 100vh;
-    gap: 20px;
-}
-
-.box {
-    flex: 0 1 150px;
-    height: 150px;
-    background: linear-gradient(135deg, #667eea, #764ba2);
-    border-radius: 20px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: white;
-    font-size: 20px;
-    box-shadow: 0 8px 16px rgba(0,0,0,0.2);
-    transition: transform 0.3s;
-}
-
-.box:hover {
-    transform: translateY(-10px);
-}`
-    };
-
-    editor.value = examples[type] || examples.default;
-    updateCSSPreview();
-}
-
-function clearCSSCode() {
-    document.getElementById('cssCodeEditor').value = '';
-    loadCSSExample('default');
 }
 
 // Memory Game Variables
@@ -991,23 +674,12 @@ function restartGame() {
 
 // Game Functions
 function openPlaneLaserShooter() {
-    createGameModal('Laser Plane Shooter', `
+    createGameModal('Plane Laser Shooter', `
         <div id="planeGame" style="width: 100%; height: 400px; background: linear-gradient(180deg, #87CEEB 0%, #4682B4 100%); position: relative; overflow: hidden; border-radius: 10px;">
             <div id="plane" style="position: absolute; bottom: 20px; left: 50%; transform: translateX(-50%); width: 40px; height: 40px; font-size: 30px;">✈️</div>
             <div id="planeScore" style="position: absolute; top: 10px; left: 10px; color: white; font-weight: bold;">Score: 0</div>
             <div id="planeHealth" style="position: absolute; top: 10px; right: 10px; color: white; font-weight: bold;">Health: 100</div>
-            <div style="color: white; text-align: center; margin-top: 20px;">Use WASD keys or touch controls to move! Press SPACE or FIRE button to shoot lasers! Destroy enemy planes! 💥</div>
-            <div style="position: absolute; bottom: 60px; left: 0; right: 0; display: flex; justify-content: space-between; padding: 0 20px;">
-                <div style="display: flex; flex-direction: column; align-items: center; gap: 10px;">
-                    <button id="planeUpBtn" style="width: 60px; height: 50px; font-size: 20px; border: none; border-radius: 10px; background: rgba(255,255,255,0.8); cursor: pointer; user-select: none;">⬆️</button>
-                    <div style="display: flex; gap: 10px;">
-                        <button id="planeLeftBtn" style="width: 60px; height: 50px; font-size: 20px; border: none; border-radius: 10px; background: rgba(255,255,255,0.8); cursor: pointer; user-select: none;">⬅️</button>
-                        <button id="planeRightBtn" style="width: 60px; height: 50px; font-size: 20px; border: none; border-radius: 10px; background: rgba(255,255,255,0.8); cursor: pointer; user-select: none;">➡️</button>
-                    </div>
-                    <button id="planeDownBtn" style="width: 60px; height: 50px; font-size: 20px; border: none; border-radius: 10px; background: rgba(255,255,255,0.8); cursor: pointer; user-select: none;">⬇️</button>
-                </div>
-                <button id="planeFireBtn" style="width: 80px; height: 80px; font-size: 24px; border: none; border-radius: 50%; background: rgba(255,0,0,0.8); color: white; cursor: pointer; user-select: none; font-weight: bold;">🔥<br>FIRE</button>
-            </div>
+            <div style="color: white; text-align: center; margin-top: 20px;">Use WASD to move! Press SPACE to shoot lasers! Destroy enemy planes! 💥</div>
         </div>
     `, startPlaneGame);
 }
@@ -1024,9 +696,6 @@ function startPlaneGame() {
     // Wait for modal to render properly
     setTimeout(() => {
         if (!gameRunning) return;
-
-        // Game start time for victory condition
-        const gameStartTime = Date.now();
 
         // Plane position
         let planeX = gameArea.offsetWidth / 2 - 20; // Center plane
@@ -1099,7 +768,6 @@ function startPlaneGame() {
                     enemy.remove();
                     enemies.splice(enemyIndex, 1);
                     clearInterval(moveInterval);
-
                 }
             }, 50);
         }
@@ -1155,7 +823,6 @@ function startPlaneGame() {
                         lasers.splice(laserIndex, 1);
                         clearInterval(laserInterval);
 
-
                         // Visual explosion
                         const explosion = document.createElement('div');
                         explosion.innerHTML = '💥';
@@ -1204,56 +871,6 @@ function startPlaneGame() {
 
         document.addEventListener('keydown', handleKeyDown);
         document.addEventListener('keyup', handleKeyUp);
-
-        // Touch/click controls for mobile
-        const upBtn = document.getElementById('planeUpBtn');
-        const downBtn = document.getElementById('planeDownBtn');
-        const leftBtn = document.getElementById('planeLeftBtn');
-        const rightBtn = document.getElementById('planeRightBtn');
-        const fireBtn = document.getElementById('planeFireBtn');
-
-        // Mobile touch events
-        function handleTouchStart(direction) {
-            keys[direction] = true;
-        }
-
-        function handleTouchEnd(direction) {
-            keys[direction] = false;
-        }
-
-        // Add event listeners for all direction buttons
-        upBtn.addEventListener('mousedown', () => handleTouchStart('w'));
-        upBtn.addEventListener('mouseup', () => handleTouchEnd('w'));
-        upBtn.addEventListener('mouseleave', () => handleTouchEnd('w'));
-        upBtn.addEventListener('touchstart', (e) => { e.preventDefault(); handleTouchStart('w'); });
-        upBtn.addEventListener('touchend', (e) => { e.preventDefault(); handleTouchEnd('w'); });
-
-        downBtn.addEventListener('mousedown', () => handleTouchStart('s'));
-        downBtn.addEventListener('mouseup', () => handleTouchEnd('s'));
-        downBtn.addEventListener('mouseleave', () => handleTouchEnd('s'));
-        downBtn.addEventListener('touchstart', (e) => { e.preventDefault(); handleTouchStart('s'); });
-        downBtn.addEventListener('touchend', (e) => { e.preventDefault(); handleTouchEnd('s'); });
-
-        leftBtn.addEventListener('mousedown', () => handleTouchStart('a'));
-        leftBtn.addEventListener('mouseup', () => handleTouchEnd('a'));
-        leftBtn.addEventListener('mouseleave', () => handleTouchEnd('a'));
-        leftBtn.addEventListener('touchstart', (e) => { e.preventDefault(); handleTouchStart('a'); });
-        leftBtn.addEventListener('touchend', (e) => { e.preventDefault(); handleTouchEnd('a'); });
-
-        rightBtn.addEventListener('mousedown', () => handleTouchStart('d'));
-        rightBtn.addEventListener('mouseup', () => handleTouchEnd('d'));
-        rightBtn.addEventListener('mouseleave', () => handleTouchEnd('d'));
-        rightBtn.addEventListener('touchstart', (e) => { e.preventDefault(); handleTouchStart('d'); });
-        rightBtn.addEventListener('touchend', (e) => { e.preventDefault(); handleTouchEnd('d'); });
-
-        // Fire button for shooting lasers
-        fireBtn.addEventListener('mousedown', () => {
-            shootLaser();
-        });
-        fireBtn.addEventListener('touchstart', (e) => {
-            e.preventDefault();
-            shootLaser();
-        });
 
         // Movement loop
         function updatePlanePosition() {
@@ -1315,11 +932,7 @@ function openAnimalRescue() {
         <div id="animalGame" style="width: 100%; height: 400px; background: linear-gradient(180deg, #87CEEB 0%, #98FB98 100%); position: relative; overflow: hidden; border-radius: 10px;">
             <div id="basket" style="position: absolute; bottom: 10px; left: 50%; transform: translateX(-50%); width: 60px; height: 40px; font-size: 35px;">🧺</div>
             <div id="animalScore" style="position: absolute; top: 10px; left: 10px; font-weight: bold;">Animals Saved: 0</div>
-            <div style="text-align: center; margin-top: 20px;">Use A/D keys or touch buttons to move the basket! Save the falling animals! 🐾</div>
-            <div style="position: absolute; bottom: 60px; left: 0; right: 0; display: flex; justify-content: space-between; padding: 0 20px;">
-                <button id="animalLeftBtn" style="width: 80px; height: 50px; font-size: 24px; border: none; border-radius: 10px; background: rgba(255,255,255,0.8); cursor: pointer; user-select: none;">⬅️</button>
-                <button id="animalRightBtn" style="width: 80px; height: 50px; font-size: 24px; border: none; border-radius: 10px; background: rgba(255,255,255,0.8); cursor: pointer; user-select: none;">➡️</button>
-            </div>
+            <div style="text-align: center; margin-top: 20px;">Use A/D keys to move the basket! Save the falling animals! 🐾</div>
         </div>
     `, startAnimalGame);
 }
@@ -1407,32 +1020,6 @@ function startAnimalGame() {
     document.addEventListener('keydown', handleKeyDown);
     document.addEventListener('keyup', handleKeyUp);
 
-    // Touch/click controls for mobile
-    const leftBtn = document.getElementById('animalLeftBtn');
-    const rightBtn = document.getElementById('animalRightBtn');
-
-    // Mobile touch events
-    function handleTouchStart(direction) {
-        keys[direction] = true;
-    }
-
-    function handleTouchEnd(direction) {
-        keys[direction] = false;
-    }
-
-    // Add event listeners for touch buttons
-    leftBtn.addEventListener('mousedown', () => handleTouchStart('a'));
-    leftBtn.addEventListener('mouseup', () => handleTouchEnd('a'));
-    leftBtn.addEventListener('mouseleave', () => handleTouchEnd('a'));
-    leftBtn.addEventListener('touchstart', (e) => { e.preventDefault(); handleTouchStart('a'); });
-    leftBtn.addEventListener('touchend', (e) => { e.preventDefault(); handleTouchEnd('a'); });
-
-    rightBtn.addEventListener('mousedown', () => handleTouchStart('d'));
-    rightBtn.addEventListener('mouseup', () => handleTouchEnd('d'));
-    rightBtn.addEventListener('mouseleave', () => handleTouchEnd('d'));
-    rightBtn.addEventListener('touchstart', (e) => { e.preventDefault(); handleTouchStart('d'); });
-    rightBtn.addEventListener('touchend', (e) => { e.preventDefault(); handleTouchEnd('d'); });
-
     // Movement loop
     function updateBasketPosition() {
         if (!gameRunning) return;
@@ -1459,16 +1046,6 @@ function startAnimalGame() {
         clearInterval(animalInterval);
         document.removeEventListener('keydown', handleKeyDown);
         document.removeEventListener('keyup', handleKeyUp);
-
-        // Clean up touch event listeners
-        if (leftBtn && rightBtn) {
-            leftBtn.removeEventListener('mousedown', () => handleTouchStart('a'));
-            leftBtn.removeEventListener('mouseup', () => handleTouchEnd('a'));
-            leftBtn.removeEventListener('mouseleave', () => handleTouchEnd('a'));
-            rightBtn.removeEventListener('mousedown', () => handleTouchStart('d'));
-            rightBtn.removeEventListener('mouseup', () => handleTouchEnd('d'));
-            rightBtn.removeEventListener('mouseleave', () => handleTouchEnd('d'));
-        }
     }, 30000); // Game runs for 30 seconds
 }
 
@@ -1477,17 +1054,7 @@ function openOceanExplorer() {
         <div id="oceanGame" style="width: 100%; height: 400px; background: linear-gradient(180deg, #87CEEB 0%, #006994 100%); position: relative; overflow: hidden; border-radius: 10px;">
             <div id="diver" style="position: absolute; top: 50%; left: 50px; transform: translateY(-50%); width: 40px; height: 40px; font-size: 30px;">🤿</div>
             <div id="oceanScore" style="position: absolute; top: 10px; left: 10px; color: white; font-weight: bold;">Treasures: 0</div>
-            <div style="color: white; text-align: center; margin-top: 20px;">Use WASD keys or touch controls to swim! Collect the treasures! 💎</div>
-            <div style="position: absolute; bottom: 60px; left: 0; right: 0; display: flex; justify-content: center; gap: 20px;">
-                <div style="display: flex; flex-direction: column; align-items: center; gap: 10px;">
-                    <button id="oceanUpBtn" style="width: 60px; height: 50px; font-size: 20px; border: none; border-radius: 10px; background: rgba(255,255,255,0.8); cursor: pointer; user-select: none;">⬆️</button>
-                    <div style="display: flex; gap: 10px;">
-                        <button id="oceanLeftBtn" style="width: 60px; height: 50px; font-size: 20px; border: none; border-radius: 10px; background: rgba(255,255,255,0.8); cursor: pointer; user-select: none;">⬅️</button>
-                        <button id="oceanRightBtn" style="width: 60px; height: 50px; font-size: 20px; border: none; border-radius: 10px; background: rgba(255,255,255,0.8); cursor: pointer; user-select: none;">➡️</button>
-                    </div>
-                    <button id="oceanDownBtn" style="width: 60px; height: 50px; font-size: 20px; border: none; border-radius: 10px; background: rgba(255,255,255,0.8); cursor: pointer; user-select: none;">⬇️</button>
-                </div>
-            </div>
+            <div style="color: white; text-align: center; margin-top: 20px;">Use WASD keys to swim! Collect the treasures! 💎</div>
         </div>
     `, startOceanGame);
 }
@@ -1575,46 +1142,6 @@ function startOceanGame() {
     document.addEventListener('keydown', handleKeyDown);
     document.addEventListener('keyup', handleKeyUp);
 
-    // Touch/click controls for mobile
-    const upBtn = document.getElementById('oceanUpBtn');
-    const downBtn = document.getElementById('oceanDownBtn');
-    const leftBtn = document.getElementById('oceanLeftBtn');
-    const rightBtn = document.getElementById('oceanRightBtn');
-
-    // Mobile touch events
-    function handleTouchStart(direction) {
-        keys[direction] = true;
-    }
-
-    function handleTouchEnd(direction) {
-        keys[direction] = false;
-    }
-
-    // Add event listeners for all direction buttons
-    upBtn.addEventListener('mousedown', () => handleTouchStart('w'));
-    upBtn.addEventListener('mouseup', () => handleTouchEnd('w'));
-    upBtn.addEventListener('mouseleave', () => handleTouchEnd('w'));
-    upBtn.addEventListener('touchstart', (e) => { e.preventDefault(); handleTouchStart('w'); });
-    upBtn.addEventListener('touchend', (e) => { e.preventDefault(); handleTouchEnd('w'); });
-
-    downBtn.addEventListener('mousedown', () => handleTouchStart('s'));
-    downBtn.addEventListener('mouseup', () => handleTouchEnd('s'));
-    downBtn.addEventListener('mouseleave', () => handleTouchEnd('s'));
-    downBtn.addEventListener('touchstart', (e) => { e.preventDefault(); handleTouchStart('s'); });
-    downBtn.addEventListener('touchend', (e) => { e.preventDefault(); handleTouchEnd('s'); });
-
-    leftBtn.addEventListener('mousedown', () => handleTouchStart('a'));
-    leftBtn.addEventListener('mouseup', () => handleTouchEnd('a'));
-    leftBtn.addEventListener('mouseleave', () => handleTouchEnd('a'));
-    leftBtn.addEventListener('touchstart', (e) => { e.preventDefault(); handleTouchStart('a'); });
-    leftBtn.addEventListener('touchend', (e) => { e.preventDefault(); handleTouchEnd('a'); });
-
-    rightBtn.addEventListener('mousedown', () => handleTouchStart('d'));
-    rightBtn.addEventListener('mouseup', () => handleTouchEnd('d'));
-    rightBtn.addEventListener('mouseleave', () => handleTouchEnd('d'));
-    rightBtn.addEventListener('touchstart', (e) => { e.preventDefault(); handleTouchStart('d'); });
-    rightBtn.addEventListener('touchend', (e) => { e.preventDefault(); handleTouchEnd('d'); });
-
     // Movement loop
     function updateDiverPosition() {
         if (!gameRunning) return;
@@ -1650,15 +1177,6 @@ function startOceanGame() {
         clearInterval(treasureInterval);
         document.removeEventListener('keydown', handleKeyDown);
         document.removeEventListener('keyup', handleKeyUp);
-
-        // Clean up touch event listeners
-        if (upBtn && downBtn && leftBtn && rightBtn) {
-            [upBtn, downBtn, leftBtn, rightBtn].forEach(btn => {
-                btn.removeEventListener('mousedown', handleTouchStart);
-                btn.removeEventListener('mouseup', handleTouchEnd);
-                btn.removeEventListener('mouseleave', handleTouchEnd);
-            });
-        }
     }, 30000); // Game runs for 30 seconds
 }
 
@@ -1667,7 +1185,7 @@ function openJumpParkour() {
     createGameModal('Whack a Mole', `
         <div style="text-align: center; padding: 20px;">
             <h2>🔨 Whack a Mole</h2>
-            <p>Click or tap the moles when they pop up! Get as many as you can!</p>
+            <p>Click the moles when they pop up! Get as many as you can!</p>
             <div id="moleArea" style="width: 400px; height: 300px; position: relative; border: 3px solid #8b4513; border-radius: 15px; background: #2ecc71; overflow: hidden; margin: 0 auto; display: grid; grid-template-columns: repeat(3, 1fr); grid-template-rows: repeat(3, 1fr); gap: 10px; padding: 20px;">
                 <div class="mole-hole" data-hole="0" style="background: #654321; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; position: relative;"></div>
                 <div class="mole-hole" data-hole="1" style="background: #654321; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; position: relative;"></div>
@@ -1792,7 +1310,7 @@ function startMoleGame() {
                     }, 300);
                 }
             });
-        }, 2500 + Math.random() * 2500); // Stay visible for 2.5-5 seconds
+        }, 3500 + Math.random() * 3500); // Stay visible for 2.5-5 seconds
     }
 
     // Start spawning moles
@@ -1806,22 +1324,14 @@ function startMoleGame() {
 
 function openBlockBreaker() {
     createGameModal('Block Breaker', `
-        <div style="text-align: center; padding: 10px;">
+        <div style="text-align: center; padding: 20px;">
             <h2>🧱 Block Breaker</h2>
-            <p style="font-size: 14px; margin: 5px 0;">Swipe, tap, or use A/D keys to move paddle!</p>
-            <div id="blockArea" style="width: min(500px, 95vw); height: min(400px, 60vh); position: relative; border: 3px solid #2c3e50; border-radius: 10px; background: #34495e; overflow: hidden; margin: 0 auto; touch-action: none;">
+            <p>Use mouse or A/D keys to move paddle! Bounce the ball to break blocks!</p>
+            <div id="blockArea" style="width: 500px; height: 400px; position: relative; border: 3px solid #2c3e50; border-radius: 10px; background: #34495e; overflow: hidden; margin: 0 auto;">
                 <div id="paddle" style="position: absolute; bottom: 20px; left: 50%; transform: translateX(-50%); width: 80px; height: 10px; background: #3498db; border-radius: 5px;"></div>
                 <div id="ball" style="position: absolute; bottom: 35px; left: 50%; transform: translateX(-50%); width: 12px; height: 12px; background: #e74c3c; border-radius: 50%;"></div>
-                <div id="blockScore" style="position: absolute; top: 10px; left: 10px; color: white; font-weight: bold; z-index: 100; font-size: 14px;">Score: 0</div>
-                <div id="blockLives" style="position: absolute; top: 10px; right: 10px; color: white; font-weight: bold; z-index: 100; font-size: 14px;">Lives: 3</div>
-            </div>
-            <div style="margin-top: 10px; color: #666; font-size: 12px;">Touch game area to control paddle</div>
-            <div id="paddleControls" style="margin-top: 10px; display: flex; justify-content: space-between; max-width: 300px; margin-left: auto; margin-right: auto;">
-                <button class="paddle-btn" data-direction="left" style="background: #e74c3c; color: white; border: none; border-radius: 15px; padding: 20px 30px; font-size: 24px; cursor: pointer; touch-action: manipulation; user-select: none; flex: 1; margin: 0 5px; box-shadow: 0 4px 8px rgba(0,0,0,0.2);">⬅️</button>
-                <button class="paddle-btn" data-direction="right" style="background: #e74c3c; color: white; border: none; border-radius: 15px; padding: 20px 30px; font-size: 24px; cursor: pointer; touch-action: manipulation; user-select: none; flex: 1; margin: 0 5px; box-shadow: 0 4px 8px rgba(0,0,0,0.2);">➡️</button>
-            </div>
-            <div style="margin-top: 10px; display: flex; justify-content: center;">
-                <button id="pauseBtn" style="background: #95a5a6; color: white; border: none; border-radius: 10px; padding: 10px 20px; font-size: 14px; cursor: pointer; touch-action: manipulation;">⏸️ Pause</button>
+                <div id="blockScore" style="position: absolute; top: 10px; left: 10px; color: white; font-weight: bold; z-index: 100;">Score: 0</div>
+                <div id="blockLives" style="position: absolute; top: 10px; right: 10px; color: white; font-weight: bold; z-index: 100;">Lives: 3</div>
             </div>
         </div>
     `, startBlockGame);
@@ -1837,9 +1347,9 @@ function startBlockGame() {
     const scoreDisplay = document.getElementById('blockScore');
     const livesDisplay = document.getElementById('blockLives');
 
-    // Game dimensions - responsive to actual container size
-    const gameWidth = gameArea.offsetWidth;
-    const gameHeight = gameArea.offsetHeight;
+    // Game dimensions
+    const gameWidth = 500;
+    const gameHeight = 400;
 
     // Paddle properties
     let paddleX = gameWidth / 2 - 40; // Center paddle
@@ -1919,102 +1429,9 @@ function startBlockGame() {
     document.addEventListener('keyup', handleKeyUp);
     gameArea.addEventListener('mousemove', handleMouseMove);
 
-    // Enhanced touch controls for mobile
-    const paddleButtons = document.querySelectorAll('.paddle-btn');
-    paddleButtons.forEach(btn => {
-        btn.addEventListener('touchstart', (e) => {
-            e.preventDefault();
-            const direction = btn.getAttribute('data-direction');
-            if (direction === 'left') keys['a'] = true;
-            if (direction === 'right') keys['d'] = true;
-            btn.style.transform = 'scale(0.95)';
-            btn.style.backgroundColor = '#c0392b';
-        });
-
-        btn.addEventListener('touchend', (e) => {
-            e.preventDefault();
-            const direction = btn.getAttribute('data-direction');
-            if (direction === 'left') keys['a'] = false;
-            if (direction === 'right') keys['d'] = false;
-            btn.style.transform = 'scale(1)';
-            btn.style.backgroundColor = '#e74c3c';
-        });
-
-        // Also handle mouse clicks for testing
-        btn.addEventListener('mousedown', (e) => {
-            const direction = btn.getAttribute('data-direction');
-            if (direction === 'left') keys['a'] = true;
-            if (direction === 'right') keys['d'] = true;
-            btn.style.transform = 'scale(0.95)';
-        });
-
-        btn.addEventListener('mouseup', (e) => {
-            const direction = btn.getAttribute('data-direction');
-            if (direction === 'left') keys['a'] = false;
-            if (direction === 'right') keys['d'] = false;
-            btn.style.transform = 'scale(1)';
-        });
-    });
-
-    // Touch/swipe controls on game area
-    let touchStartX = 0;
-    let touchStartY = 0;
-    let lastTouchX = 0;
-    let isTouching = false;
-
-    gameArea.addEventListener('touchstart', (e) => {
-        e.preventDefault();
-        const touch = e.touches[0];
-        const rect = gameArea.getBoundingClientRect();
-        touchStartX = touch.clientX - rect.left;
-        touchStartY = touch.clientY - rect.top;
-        lastTouchX = touchStartX;
-        isTouching = true;
-
-        // Direct paddle positioning for immediate response
-        const gameAreaWidth = gameArea.offsetWidth;
-        const paddleWidthPx = 80;
-        paddleX = Math.max(0, Math.min(gameAreaWidth - paddleWidthPx, touchStartX - paddleWidthPx / 2));
-    });
-
-    gameArea.addEventListener('touchmove', (e) => {
-        if (!isTouching) return;
-        e.preventDefault();
-        const touch = e.touches[0];
-        const rect = gameArea.getBoundingClientRect();
-        const currentTouchX = touch.clientX - rect.left;
-
-        // Direct paddle positioning for smooth movement
-        const gameAreaWidth = gameArea.offsetWidth;
-        const paddleWidthPx = 80;
-        paddleX = Math.max(0, Math.min(gameAreaWidth - paddleWidthPx, currentTouchX - paddleWidthPx / 2));
-
-        lastTouchX = currentTouchX;
-    });
-
-    gameArea.addEventListener('touchend', (e) => {
-        e.preventDefault();
-        isTouching = false;
-    });
-
-    // Pause button functionality
-    const pauseBtn = document.getElementById('pauseBtn');
-    let isPaused = false;
-    if (pauseBtn) {
-        pauseBtn.addEventListener('click', () => {
-            isPaused = !isPaused;
-            pauseBtn.textContent = isPaused ? '▶️ Resume' : '⏸️ Pause';
-            pauseBtn.style.backgroundColor = isPaused ? '#27ae60' : '#95a5a6';
-        });
-    }
-
     // Game loop
     function gameLoop() {
         if (!gameRunning) return;
-        if (isPaused) {
-            requestAnimationFrame(gameLoop);
-            return;
-        }
 
         // Move paddle with A/D keys
         if (keys['a'] && paddleX > 0) {
@@ -2121,73 +1538,13 @@ function startBlockGame() {
 
 function openFixComputer() {
     createGameModal('Fix the Computer', `
-        <div id="computerGame" style="width: 100%; height: 550px; background: linear-gradient(180deg, #2c3e50 0%, #34495e 100%); position: relative; overflow: hidden; border-radius: 10px; padding: 20px;">
-            <!-- Initial Screen: Closed Computer -->
-            <div id="startScreen" style="text-align: center; height: 100%; display: flex; flex-direction: column; justify-content: center; align-items: center;">
-                <h2 style="color: white; margin-bottom: 15px; margin-top: 0;">🔧 Computer Repair Shop</h2>
-                <p style="color: #ecf0f1; margin-bottom: 20px; font-size: 14px;">A customer brought in a broken computer. Open it and fix the broken parts before time runs out!</p>
-
-                <div style="margin: 15px auto; width: 250px; height: 180px; background: linear-gradient(145deg, #555, #222); border-radius: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); position: relative; border: 3px solid #333;">
-                    <div style="position: absolute; top: 10px; right: 10px; font-size: 60px;">💻</div>
-                    <div style="position: absolute; bottom: 15px; left: 50%; transform: translateX(-50%); color: #7f8c8d; font-size: 12px;">Dell OptiPlex 7090</div>
-                </div>
-
-                <div style="margin: 15px auto; width: 180px; height: 70px; background: linear-gradient(145deg, #8B4513, #654321); border-radius: 10px; box-shadow: 0 5px 15px rgba(0,0,0,0.4); position: relative; border: 2px solid #A0522D;">
-                    <div style="text-align: center; padding-top: 8px; color: #fff; font-weight: bold; font-size: 13px;">🧰 Toolbox</div>
-                    <div style="text-align: center; font-size: 26px;">🔧 🪛</div>
-                </div>
-
-                <button id="openComputerBtn" style="margin-top: 20px; padding: 15px 40px; font-size: 18px; background: linear-gradient(145deg, #27ae60, #229954); color: white; border: none; border-radius: 10px; cursor: pointer; font-weight: bold; box-shadow: 0 5px 15px rgba(39,174,96,0.4); transition: transform 0.2s;">
-                    🔓 Open Computer & Start Repair
-                </button>
-            </div>
-
-            <!-- Game Screen: Open Computer (Hidden Initially) -->
-            <div id="gameScreen" style="display: none; height: 100%;">
-                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
-                    <div style="color: white;">
-                        <h3 style="margin: 0;">🔧 Repair in Progress</h3>
-                        <div id="partsCounter" style="font-size: 16px; margin-top: 5px;">Parts Fixed: 0/<span id="totalBroken">0</span></div>
-                    </div>
-                    <div id="timerDisplay" style="font-size: 32px; font-weight: bold; color: #27ae60; background: rgba(0,0,0,0.3); padding: 10px 20px; border-radius: 10px;">
-                        ⏱️ 60s
-                    </div>
-                </div>
-
-                <div style="display: flex; gap: 15px; height: 420px;">
-                    <!-- Computer Interior (Left Side) -->
-                    <div style="flex: 1.2; background: linear-gradient(145deg, #1a1a1a, #2d2d2d); border-radius: 10px; padding: 15px; border: 3px solid #444; position: relative;">
-                        <div style="text-align: center; color: #fff; margin-bottom: 10px; font-weight: bold; background: rgba(0,0,0,0.5); padding: 8px; border-radius: 5px;">
-                            💻 Computer Interior
-                        </div>
-                        <div id="computerInterior" style="position: relative; height: 350px; background: #111; border-radius: 8px; padding: 15px; border: 2px solid #333;">
-                            <!-- Computer parts will be rendered here with X marks on broken ones -->
-                        </div>
-                    </div>
-
-                    <!-- Parts Inventory (Right Side) -->
-                    <div style="flex: 0.8; background: linear-gradient(145deg, #8B4513, #654321); border-radius: 10px; padding: 15px; border: 3px solid #A0522D; overflow-y: auto;">
-                        <div style="text-align: center; color: white; margin-bottom: 10px; font-weight: bold; background: rgba(0,0,0,0.3); padding: 8px; border-radius: 5px;">
-                            🔩 Replacement Parts
-                        </div>
-                        <div id="partsInventory" style="display: flex; flex-direction: column; gap: 10px;">
-                            <!-- Infinite parts inventory will be here -->
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Results Screen (Hidden Initially) -->
-            <div id="resultsScreen" style="display: none; text-align: center; height: 100%; padding-top: 50px;">
-                <h2 style="color: white; margin-bottom: 20px;">⏰ Time's Up!</h2>
-                <div id="resultsContent" style="background: rgba(0,0,0,0.5); padding: 40px; border-radius: 15px; max-width: 400px; margin: 0 auto;">
-                    <div style="font-size: 60px; margin-bottom: 20px;" id="resultsEmoji">⚙️</div>
-                    <div style="color: white; font-size: 24px; margin-bottom: 15px;" id="resultsMessage">Good effort!</div>
-                    <div style="color: #ecf0f1; font-size: 18px; margin-bottom: 10px;" id="partsFixedResult">Parts Fixed: 0/0</div>
-                    <div style="color: #3498db; font-size: 28px; font-weight: bold; margin-bottom: 30px;" id="accuracyResult">Accuracy: 0%</div>
-                    <button onclick="location.reload()" style="padding: 15px 40px; font-size: 18px; background: linear-gradient(145deg, #3498db, #2980b9); color: white; border: none; border-radius: 10px; cursor: pointer; font-weight: bold; box-shadow: 0 5px 15px rgba(52,152,219,0.4);">
-                        🔄 Play Again
-                    </button>
+        <div id="computerGame" style="width: 100%; height: 400px; background: linear-gradient(180deg, #1e3c72 0%, #2a5298 100%); position: relative; overflow: hidden; border-radius: 10px;">
+            <div id="computerScreen" style="width: 80%; height: 300px; background: #000; margin: 20px auto; border-radius: 10px; position: relative; border: 3px solid #333;">
+                <div id="computerScore" style="position: absolute; top: 10px; left: 10px; color: #00ff00; font-weight: bold;">Fixes: 0</div>
+                <div id="computerTimer" style="position: absolute; top: 10px; right: 10px; color: #00ff00; font-weight: bold;">Time: 60s</div>
+                <div id="taskDisplay" style="color: #00ff00; text-align: center; margin-top: 40px; font-family: monospace; padding: 20px;">
+                    <div>🖥️ COMPUTER REPAIR SYSTEM</div>
+                    <div style="margin-top: 20px; color: #ffff00;">CLICK ON ERRORS TO FIX THEM!</div>
                 </div>
             </div>
         </div>
@@ -2195,351 +1552,180 @@ function openFixComputer() {
 }
 
 function startComputerGame() {
-    // Part definitions with icons and colors
-    const allParts = [
-        { id: 'cpu', name: 'CPU', icon: '🧠', color: '#ff6b6b' },
-        { id: 'ram', name: 'RAM', icon: '💾', color: '#4ecdc4' },
-        { id: 'gpu', name: 'GPU', icon: '🎮', color: '#95e1d3' },
-        { id: 'hdd', name: 'HDD', icon: '💿', color: '#f38181' },
-        { id: 'psu', name: 'PSU', icon: '⚡', color: '#feca57' },
-        { id: 'fan', name: 'Cooling Fan', icon: '🌀', color: '#a29bfe' },
-        { id: 'motherboard', name: 'Motherboard', icon: '🔌', color: '#fd79a8' },
-        { id: 'ssd', name: 'SSD', icon: '💽', color: '#6c5ce7' }
+    let computerScore = 0;
+    let timeLeft = 60;
+    let gameRunning = true;
+    const gameArea = document.getElementById('computerScreen');
+    const scoreDisplay = document.getElementById('computerScore');
+    const timerDisplay = document.getElementById('computerTimer');
+    const taskDisplay = document.getElementById('taskDisplay');
+
+    const errorTypes = [
+        { icon: '❌', name: 'System Error', points: 10 },
+        { icon: '⚠️', name: 'Warning', points: 5 },
+        { icon: '🔥', name: 'Critical Bug', points: 20 },
+        { icon: '🐛', name: 'Software Bug', points: 15 },
+        { icon: '⛔', name: 'Access Denied', points: 12 },
+        { icon: '💀', name: 'Fatal Error', points: 25 },
+        { icon: '🚫', name: 'Connection Failed', points: 8 }
     ];
 
-    // Game state
-    let partsFixed = 0;
-    let timeLeft = 60;
-    let timerInterval = null;
-    let gameActive = false;
-    let brokenParts = [];
-    let draggedPart = null;
+    const computerTasks = [
+        'Installing security updates...',
+        'Scanning for viruses...',
+        'Cleaning temporary files...',
+        'Updating drivers...',
+        'Optimizing system performance...',
+        'Fixing registry errors...',
+        'Backing up important files...',
+        'Running diagnostic tests...'
+    ];
 
-    // Get DOM elements
-    const startScreen = document.getElementById('startScreen');
-    const gameScreen = document.getElementById('gameScreen');
-    const resultsScreen = document.getElementById('resultsScreen');
-    const openBtn = document.getElementById('openComputerBtn');
-    const timerDisplay = document.getElementById('timerDisplay');
-    const partsCounter = document.getElementById('partsCounter');
-    const computerInterior = document.getElementById('computerInterior');
-    const partsInventory = document.getElementById('partsInventory');
+    let currentTaskIndex = 0;
 
-    // Open computer button - starts the game
-    openBtn.addEventListener('click', () => {
-        startScreen.style.display = 'none';
-        gameScreen.style.display = 'block';
-        initializeGame();
-    });
-
-    function initializeGame() {
-        // Randomly select 3-5 broken parts
-        const numBroken = Math.floor(Math.random() * 3) + 3; // 3 to 5 parts
-        brokenParts = [];
-        const shuffled = [...allParts].sort(() => Math.random() - 0.5);
-        brokenParts = shuffled.slice(0, numBroken);
-
-        document.getElementById('totalBroken').textContent = brokenParts.length;
-
-        // Render computer interior with all parts
-        renderComputerInterior();
-
-        // Render infinite parts inventory
-        renderPartsInventory();
-
-        // Start timer
-        gameActive = true;
-        startTimer();
-    }
-
-    function renderComputerInterior() {
-        computerInterior.innerHTML = '';
-
-        // Render all parts in computer
-        allParts.forEach((part, index) => {
-            const isBroken = brokenParts.find(p => p.id === part.id);
-
-            const partDiv = document.createElement('div');
-            partDiv.className = 'computer-part-slot';
-            partDiv.setAttribute('data-part-id', part.id);
-            partDiv.style.cssText = `
-                position: relative;
-                width: 90px;
-                height: 70px;
-                background: ${isBroken ? 'rgba(231, 76, 60, 0.2)' : 'rgba(46, 204, 113, 0.2)'};
-                border: 2px solid ${isBroken ? '#e74c3c' : '#2ecc71'};
-                border-radius: 8px;
-                display: inline-flex;
-                flex-direction: column;
-                align-items: center;
-                justify-content: center;
-                margin: 8px;
-                transition: all 0.3s ease;
-            `;
-
-            // Part icon
-            const icon = document.createElement('div');
-            icon.style.fontSize = '32px';
-            icon.textContent = part.icon;
-            partDiv.appendChild(icon);
-
-            // Part name - HIDDEN (user requested to not show names)
-            // const name = document.createElement('div');
-            // name.style.cssText = 'font-size: 10px; color: white; font-weight: bold; margin-top: 2px;';
-            // name.textContent = part.name;
-            // partDiv.appendChild(name);
-
-            // Add X marker if broken
-            if (isBroken) {
-                const xMark = document.createElement('div');
-                xMark.className = 'x-marker';
-                xMark.style.cssText = `
-                    position: absolute;
-                    top: -10px;
-                    right: -10px;
-                    width: 30px;
-                    height: 30px;
-                    background: #e74c3c;
-                    color: white;
-                    border-radius: 50%;
-                    display: flex;
-                    align-items: center;
-                    justify-content: center;
-                    font-size: 20px;
-                    font-weight: bold;
-                    box-shadow: 0 2px 8px rgba(231, 76, 60, 0.6);
-                    animation: pulse 1s infinite;
-                `;
-                xMark.textContent = '✗';
-                partDiv.appendChild(xMark);
-
-                // Make it a drop zone
-                partDiv.classList.add('drop-zone');
-                setupDropZone(partDiv, part.id);
-            }
-
-            computerInterior.appendChild(partDiv);
-        });
-    }
-
-    function renderPartsInventory() {
-        partsInventory.innerHTML = '';
-
-        // Create infinite supply of all parts
-        allParts.forEach(part => {
-            const partDiv = document.createElement('div');
-            partDiv.className = 'inventory-part';
-            partDiv.setAttribute('data-part-id', part.id);
-            partDiv.draggable = true;
-            partDiv.style.cssText = `
-                background: ${part.color};
-                padding: 12px;
-                border-radius: 8px;
-                text-align: center;
-                cursor: move;
-                box-shadow: 0 4px 6px rgba(0,0,0,0.3);
-                transition: transform 0.2s;
-            `;
-
-            partDiv.innerHTML = `
-                <div style="font-size: 28px;">${part.icon}</div>
-            `;
-
-            // Add tooltip/title attribute to show part name on hover
-            partDiv.title = part.name;
-
-            // Drag events
-            partDiv.addEventListener('dragstart', (e) => {
-                draggedPart = part.id;
-                partDiv.style.opacity = '0.5';
-            });
-
-            partDiv.addEventListener('dragend', (e) => {
-                partDiv.style.opacity = '1';
-                draggedPart = null;
-            });
-
-            partDiv.addEventListener('mouseenter', () => {
-                partDiv.style.transform = 'scale(1.05)';
-            });
-
-            partDiv.addEventListener('mouseleave', () => {
-                partDiv.style.transform = 'scale(1)';
-            });
-
-            partsInventory.appendChild(partDiv);
-        });
-    }
-
-    function setupDropZone(element, partId) {
-        element.addEventListener('dragover', (e) => {
-            e.preventDefault();
-            if (gameActive && draggedPart === partId) {
-                element.style.borderColor = '#2ecc71';
-                element.style.background = 'rgba(46, 204, 113, 0.3)';
-            }
-        });
-
-        element.addEventListener('dragleave', () => {
-            element.style.borderColor = '#e74c3c';
-            element.style.background = 'rgba(231, 76, 60, 0.2)';
-        });
-
-        element.addEventListener('drop', (e) => {
-            e.preventDefault();
-            if (gameActive && draggedPart === partId && element.classList.contains('drop-zone')) {
-                fixPart(element, partId);
-            }
-        });
-    }
-
-    function fixPart(element, partId) {
-        // Remove X marker
-        const xMark = element.querySelector('.x-marker');
-        if (xMark) xMark.remove();
-
-        // Update styling to show it's fixed
-        element.style.background = 'rgba(46, 204, 113, 0.3)';
-        element.style.borderColor = '#2ecc71';
-        element.classList.remove('drop-zone');
-
-        // Success animation
-        const checkmark = document.createElement('div');
-        checkmark.textContent = '✓';
-        checkmark.style.cssText = `
-            position: absolute;
-            top: -10px;
-            right: -10px;
-            width: 30px;
-            height: 30px;
-            background: #2ecc71;
-            color: white;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 20px;
-            font-weight: bold;
-            box-shadow: 0 2px 8px rgba(46, 204, 113, 0.6);
-        `;
-        element.appendChild(checkmark);
-
-        // Update counter
-        partsFixed++;
-        partsCounter.textContent = `Parts Fixed: ${partsFixed}/${brokenParts.length}`;
-
-        // Check if all parts are fixed - go to next computer
-        if (partsFixed === brokenParts.length) {
-            gameActive = false;
+    // Update timer
+    const timerInterval = setInterval(() => {
+        if (!gameRunning) {
             clearInterval(timerInterval);
-
-            // Show success message and reset to start screen
-            setTimeout(() => {
-                gameScreen.style.display = 'none';
-                startScreen.style.display = 'flex';
-
-                // Reset game state
-                partsFixed = 0;
-                timeLeft = 60;
-                brokenParts = [];
-            }, 800); // Brief delay to show the last checkmark
+            return;
         }
-    }
 
-    function startTimer() {
-        timerInterval = setInterval(() => {
-            if (!gameActive) return;
+        timeLeft--;
+        timerDisplay.textContent = `Time: ${timeLeft}s`;
 
-            timeLeft--;
-            timerDisplay.textContent = `⏱️ ${timeLeft}s`;
-
-            // Update timer color based on time left
-            if (timeLeft > 30) {
-                timerDisplay.style.color = '#27ae60'; // Green
-            } else if (timeLeft > 10) {
-                timerDisplay.style.color = '#f39c12'; // Yellow
-            } else {
-                timerDisplay.style.color = '#e74c3c'; // Red
-            }
-
-            if (timeLeft <= 0) {
-                endGame();
-            }
-        }, 1000);
-    }
-
-    function endGame() {
-        gameActive = false;
-        clearInterval(timerInterval);
-
-        gameScreen.style.display = 'none';
-        resultsScreen.style.display = 'block';
-
-        // Calculate accuracy
-        const accuracy = Math.round((partsFixed / brokenParts.length) * 100);
-
-        // Update results
-        document.getElementById('partsFixedResult').textContent = `Parts Fixed: ${partsFixed}/${brokenParts.length}`;
-        document.getElementById('accuracyResult').textContent = `Accuracy: ${accuracy}%`;
-
-        // Set emoji and message based on performance
-        const resultsEmoji = document.getElementById('resultsEmoji');
-        const resultsMessage = document.getElementById('resultsMessage');
-
-        if (accuracy === 100) {
-            resultsEmoji.textContent = '🏆';
-            resultsMessage.textContent = 'Perfect! Computer fully repaired!';
-            resultsMessage.style.color = '#2ecc71';
-        } else if (accuracy >= 75) {
-            resultsEmoji.textContent = '🎉';
-            resultsMessage.textContent = 'Great job! Almost there!';
-            resultsMessage.style.color = '#3498db';
-        } else if (accuracy >= 50) {
-            resultsEmoji.textContent = '👍';
-            resultsMessage.textContent = 'Good effort! Keep practicing!';
-            resultsMessage.style.color = '#f39c12';
-        } else if (accuracy > 0) {
-            resultsEmoji.textContent = '😅';
-            resultsMessage.textContent = 'Nice try! Try again!';
-            resultsMessage.style.color = '#e67e22';
-        } else {
-            resultsEmoji.textContent = '💔';
-            resultsMessage.textContent = 'No parts fixed. Better luck next time!';
-            resultsMessage.style.color = '#e74c3c';
+        if (timeLeft <= 0) {
+            gameRunning = false;
+            alert(`💻 Time's up! You fixed ${computerScore} errors! Great job!`);
+            clearInterval(timerInterval);
         }
+    }, 1000);
+
+    // Update task display
+    const taskInterval = setInterval(() => {
+        if (!gameRunning) {
+            clearInterval(taskInterval);
+            return;
+        }
+
+        currentTaskIndex = (currentTaskIndex + 1) % computerTasks.length;
+        taskDisplay.innerHTML = `
+            <div>🖥️ COMPUTER REPAIR SYSTEM</div>
+            <div style="margin-top: 20px; color: #ffff00;">CLICK ON ERRORS TO FIX THEM!</div>
+            <div style="margin-top: 15px; color: #00ffff; font-size: 14px;">${computerTasks[currentTaskIndex]}</div>
+        `;
+    }, 3000);
+
+    // Create computer errors
+    function createError() {
+        if (!gameRunning) return;
+
+        const errorType = errorTypes[Math.floor(Math.random() * errorTypes.length)];
+        const error = document.createElement('div');
+        error.innerHTML = errorType.icon;
+        error.title = errorType.name;
+
+        error.style.cssText = `
+            position: absolute;
+            top: ${Math.random() * 200 + 50}px;
+            left: ${Math.random() * (gameArea.offsetWidth - 100) + 50}px;
+            font-size: 25px;
+            cursor: pointer;
+            animation: pulse 1s infinite;
+            z-index: 100;
+        `;
+
+        error.addEventListener('click', () => {
+            computerScore += errorType.points;
+            scoreDisplay.textContent = `Fixes: ${computerScore}`;
+
+            // Create fix animation
+            const fixAnimation = document.createElement('div');
+            fixAnimation.innerHTML = '✅';
+            fixAnimation.style.cssText = `
+                position: absolute;
+                top: ${error.style.top};
+                left: ${error.style.left};
+                font-size: 20px;
+                color: #00ff00;
+                pointer-events: none;
+                animation: fixPulse 0.5s ease-out;
+            `;
+
+            gameArea.appendChild(fixAnimation);
+            setTimeout(() => fixAnimation.remove(), 500);
+
+            // Remove error
+            error.remove();
+
+            // Add bonus message
+            const bonus = document.createElement('div');
+            bonus.innerHTML = `+${errorType.points}`;
+            bonus.style.cssText = `
+                position: absolute;
+                top: ${parseInt(error.style.top) - 20}px;
+                left: ${error.style.left};
+                color: #ffff00;
+                font-weight: bold;
+                pointer-events: none;
+                animation: scoreFloat 1s ease-out;
+            `;
+            gameArea.appendChild(bonus);
+            setTimeout(() => bonus.remove(), 1000);
+        });
+
+        gameArea.appendChild(error);
+
+        // Auto-remove error after 5 seconds if not clicked
+        setTimeout(() => {
+            if (error.parentNode) {
+                error.remove();
+            }
+        }, 5000);
     }
 
-    // Add pulse animation for X markers
+    // Create errors every 1.5 seconds
+    const errorInterval = setInterval(createError, 1500);
+
+    // Add CSS animations
     const style = document.createElement('style');
     style.textContent = `
         @keyframes pulse {
             0%, 100% { transform: scale(1); }
             50% { transform: scale(1.1); }
         }
+        @keyframes fixPulse {
+            0% { transform: scale(1); opacity: 1; }
+            100% { transform: scale(1.5); opacity: 0; }
+        }
+        @keyframes scoreFloat {
+            0% { transform: translateY(0); opacity: 1; }
+            100% { transform: translateY(-30px); opacity: 0; }
+        }
     `;
     document.head.appendChild(style);
+
+    // Stop game after 60 seconds
+    setTimeout(() => {
+        if (gameRunning) {
+            gameRunning = false;
+            alert(`💻 Computer fixed! You resolved ${computerScore} errors! Excellent work!`);
+        }
+        clearInterval(errorInterval);
+        clearInterval(timerInterval);
+        clearInterval(taskInterval);
+        style.remove();
+    }, 60000);
 }
 
 function openCollectCoins() {
     createGameModal('Collect the Coins', `
         <div style="text-align: center; padding: 20px;">
             <h2>🪙 Collect the Coins</h2>
-            <p>Use WASD keys or touch controls to move and collect coins!</p>
+            <p>Use WASD keys to move and collect coins!</p>
             <div id="coinArea" style="width: 100%; height: 350px; position: relative; border: 2px solid #f39c12; border-radius: 10px; background: linear-gradient(45deg, #f1c40f, #f39c12); overflow: hidden;">
                 <div id="player" style="position: absolute; bottom: 20px; left: 50%; transform: translateX(-50%); width: 30px; height: 30px; font-size: 25px;">🏃‍♂️</div>
                 <div id="coinScore" style="position: absolute; top: 10px; left: 10px; color: white; font-weight: bold;">Coins: 0</div>
                 <div id="coinTimer" style="position: absolute; top: 10px; right: 10px; color: white; font-weight: bold;">Time: 30s</div>
-            </div>
-            <div id="touchControls" style="margin-top: 15px; display: grid; grid-template-columns: 1fr 1fr 1fr; grid-template-rows: 1fr 1fr 1fr; gap: 10px; max-width: 200px; margin: 15px auto;">
-                <div></div>
-                <button class="touch-btn" data-direction="up" style="background: #3498db; color: white; border: none; border-radius: 10px; padding: 15px; font-size: 20px; cursor: pointer;">⬆️</button>
-                <div></div>
-                <button class="touch-btn" data-direction="left" style="background: #3498db; color: white; border: none; border-radius: 10px; padding: 15px; font-size: 20px; cursor: pointer;">⬅️</button>
-                <div style="display: flex; align-items: center; justify-content: center; font-size: 20px;">🏃‍♂️</div>
-                <button class="touch-btn" data-direction="right" style="background: #3498db; color: white; border: none; border-radius: 10px; padding: 15px; font-size: 20px; cursor: pointer;">➡️</button>
-                <div></div>
-                <button class="touch-btn" data-direction="down" style="background: #3498db; color: white; border: none; border-radius: 10px; padding: 15px; font-size: 20px; cursor: pointer;">⬇️</button>
-                <div></div>
             </div>
         </div>
     `, startCoinGame);
@@ -2638,45 +1824,6 @@ function startCoinGame() {
     document.addEventListener('keydown', handleKeyDown);
     document.addEventListener('keyup', handleKeyUp);
 
-    // Touch controls for mobile
-    const touchButtons = document.querySelectorAll('.touch-btn');
-    touchButtons.forEach(btn => {
-        btn.addEventListener('touchstart', (e) => {
-            e.preventDefault();
-            const direction = btn.getAttribute('data-direction');
-            if (direction === 'up') keys['w'] = true;
-            if (direction === 'down') keys['s'] = true;
-            if (direction === 'left') keys['a'] = true;
-            if (direction === 'right') keys['d'] = true;
-        });
-
-        btn.addEventListener('touchend', (e) => {
-            e.preventDefault();
-            const direction = btn.getAttribute('data-direction');
-            if (direction === 'up') keys['w'] = false;
-            if (direction === 'down') keys['s'] = false;
-            if (direction === 'left') keys['a'] = false;
-            if (direction === 'right') keys['d'] = false;
-        });
-
-        // Also handle mouse clicks for testing
-        btn.addEventListener('mousedown', (e) => {
-            const direction = btn.getAttribute('data-direction');
-            if (direction === 'up') keys['w'] = true;
-            if (direction === 'down') keys['s'] = true;
-            if (direction === 'left') keys['a'] = true;
-            if (direction === 'right') keys['d'] = true;
-        });
-
-        btn.addEventListener('mouseup', (e) => {
-            const direction = btn.getAttribute('data-direction');
-            if (direction === 'up') keys['w'] = false;
-            if (direction === 'down') keys['s'] = false;
-            if (direction === 'left') keys['a'] = false;
-            if (direction === 'right') keys['d'] = false;
-        });
-    });
-
     // Movement and collision detection loop
     function gameLoop() {
         if (!gameRunning) return;
@@ -2749,16 +1896,12 @@ function openPingPong() {
     createGameModal('Ping Pong', `
         <div style="text-align: center; padding: 20px;">
             <h2>🏓 Ping Pong</h2>
-            <p>Use mouse, A/D keys, or touch controls to move your racket! Keep the ball bouncing!</p>
+            <p>Use mouse or A/D keys to move your racket! Keep the ball bouncing!</p>
             <div id="pingPongArea" style="width: 400px; height: 300px; position: relative; border: 3px solid #2c3e50; border-radius: 10px; background: #27ae60; overflow: hidden; margin: 0 auto;">
                 <div id="racket" style="position: absolute; bottom: 20px; left: 50%; transform: translateX(-50%); width: 60px; height: 8px; background: #e74c3c; border-radius: 4px;"></div>
                 <div id="ball" style="position: absolute; bottom: 35px; left: 50%; transform: translateX(-50%); width: 12px; height: 12px; background: white; border-radius: 50%;"></div>
                 <div id="pingPongScore" style="position: absolute; top: 10px; left: 10px; color: white; font-weight: bold;">Hits: 0</div>
                 <div id="pingPongLives" style="position: absolute; top: 10px; right: 10px; color: white; font-weight: bold;">Lives: 3</div>
-            </div>
-            <div id="racketControls" style="margin-top: 15px; display: flex; justify-content: center; gap: 20px;">
-                <button class="racket-btn" data-direction="left" style="background: #27ae60; color: white; border: none; border-radius: 10px; padding: 15px 25px; font-size: 18px; cursor: pointer;">⬅️ Left</button>
-                <button class="racket-btn" data-direction="right" style="background: #27ae60; color: white; border: none; border-radius: 10px; padding: 15px 25px; font-size: 18px; cursor: pointer;">➡️ Right</button>
             </div>
         </div>
     `, startPingPongGame);
@@ -2816,37 +1959,6 @@ function startPingPongGame() {
     document.addEventListener('keydown', handleKeyDown);
     document.addEventListener('keyup', handleKeyUp);
     gameArea.addEventListener('mousemove', handleMouseMove);
-
-    // Touch controls for mobile
-    const racketButtons = document.querySelectorAll('.racket-btn');
-    racketButtons.forEach(btn => {
-        btn.addEventListener('touchstart', (e) => {
-            e.preventDefault();
-            const direction = btn.getAttribute('data-direction');
-            if (direction === 'left') keys['a'] = true;
-            if (direction === 'right') keys['d'] = true;
-        });
-
-        btn.addEventListener('touchend', (e) => {
-            e.preventDefault();
-            const direction = btn.getAttribute('data-direction');
-            if (direction === 'left') keys['a'] = false;
-            if (direction === 'right') keys['d'] = false;
-        });
-
-        // Also handle mouse clicks for testing
-        btn.addEventListener('mousedown', (e) => {
-            const direction = btn.getAttribute('data-direction');
-            if (direction === 'left') keys['a'] = true;
-            if (direction === 'right') keys['d'] = true;
-        });
-
-        btn.addEventListener('mouseup', (e) => {
-            const direction = btn.getAttribute('data-direction');
-            if (direction === 'left') keys['a'] = false;
-            if (direction === 'right') keys['d'] = false;
-        });
-    });
 
     // Game loop
     function gameLoop() {
@@ -3260,264 +2372,3 @@ document.addEventListener('DOMContentLoaded', function() {
         updateActiveMenuItem(initialSection.id);
     }
 });
-
-// Interactive video content function
-function showVideoContent(videoId) {
-    const videoContent = {
-        minecraft1: {
-            title: "🏠 How to Survive Your First Night",
-            content: `
-                <div style="background: linear-gradient(135deg, #2ecc71, #27ae60); padding: 20px; border-radius: 15px; color: white; margin-bottom: 20px;">
-                    <h3 style="margin: 0; color: white;">🎮 Interactive Minecraft Survival Guide</h3>
-                    <p style="margin: 5px 0; opacity: 0.9;">Follow these steps to master your first night!</p>
-                </div>
-
-                <div style="text-align: left; max-width: 500px; margin: 0 auto;">
-                    <div style="background: #f8f9fa; padding: 15px; border-radius: 10px; margin: 15px 0; border-left: 4px solid #2ecc71;">
-                        <h4 style="color: #2ecc71; margin-top: 0;">🌅 Day 1 Checklist:</h4>
-                        <div style="display: grid; gap: 8px;">
-                            <label style="display: flex; align-items: center; cursor: pointer;">
-                                <input type="checkbox" style="margin-right: 10px;"> 🌳 Punch trees to get wood
-                            </label>
-                            <label style="display: flex; align-items: center; cursor: pointer;">
-                                <input type="checkbox" style="margin-right: 10px;"> 🔨 Make a crafting table
-                            </label>
-                            <label style="display: flex; align-items: center; cursor: pointer;">
-                                <input type="checkbox" style="margin-right: 10px;"> ⛏️ Craft wooden tools
-                            </label>
-                            <label style="display: flex; align-items: center; cursor: pointer;">
-                                <input type="checkbox" style="margin-right: 10px;"> 🏠 Build a simple shelter
-                            </label>
-                            <label style="display: flex; align-items: center; cursor: pointer;">
-                                <input type="checkbox" style="margin-right: 10px;"> 🕯️ Make torches for light
-                            </label>
-                        </div>
-                    </div>
-
-                    <div style="background: #fff3cd; padding: 15px; border-radius: 10px; margin: 15px 0; border-left: 4px solid #ffc107;">
-                        <h4 style="color: #856404; margin-top: 0;">🌙 Before Night Falls:</h4>
-                        <div style="display: grid; gap: 8px;">
-                            <label style="display: flex; align-items: center; cursor: pointer;">
-                                <input type="checkbox" style="margin-right: 10px;"> 🚪 Add a door to your shelter
-                            </label>
-                            <label style="display: flex; align-items: center; cursor: pointer;">
-                                <input type="checkbox" style="margin-right: 10px;"> 🛏️ Make a bed if you have wool
-                            </label>
-                            <label style="display: flex; align-items: center; cursor: pointer;">
-                                <input type="checkbox" style="margin-right: 10px;"> 🍖 Cook some food
-                            </label>
-                            <label style="display: flex; align-items: center; cursor: pointer;">
-                                <input type="checkbox" style="margin-right: 10px;"> ⚔️ Craft a sword for protection
-                            </label>
-                        </div>
-                    </div>
-
-                    <div style="background: #d1ecf1; padding: 15px; border-radius: 10px; margin: 15px 0; border-left: 4px solid #bee5eb;">
-                        <p style="margin: 0;"><strong style="color: #0c5460;">💡 Pro Tip:</strong> Never dig straight down! Always dig stairs or use ladders to avoid falling into lava or caves.</p>
-                    </div>
-
-                    <div style="text-align: center; margin-top: 20px;">
-                        <button onclick="alert('Great job! You\\'re ready to survive your first night! 🎉')" style="background: #2ecc71; color: white; border: none; padding: 12px 24px; border-radius: 25px; font-weight: bold; cursor: pointer; font-size: 16px;">✅ I'm Ready!</button>
-                    </div>
-                </div>
-            `
-        },
-        minecraft2: {
-            title: "⚡ Redstone Basics",
-            content: `
-                <h3>Redstone Circuits</h3>
-                <div style="text-align: left; max-width: 500px; margin: 0 auto;">
-                    <h4>🔴 Basic Components:</h4>
-                    <ul style="margin: 10px 0;">
-                        <li>⚡ Redstone Dust - carries power</li>
-                        <li>🔘 Redstone Torch - power source</li>
-                        <li>🎚️ Lever - switch on/off</li>
-                        <li>🔲 Button - temporary power</li>
-                        <li>🚀 Piston - moves blocks</li>
-                    </ul>
-                    <h4>🏗️ Simple Projects:</h4>
-                    <ul style="margin: 10px 0;">
-                        <li>💡 Automatic doors</li>
-                        <li>🔔 Doorbell system</li>
-                        <li>🏗️ Hidden staircases</li>
-                        <li>🚪 Secret passages</li>
-                    </ul>
-                    <p><strong>⚡ Remember:</strong> Power travels 15 blocks max!</p>
-                </div>
-            `
-        },
-        minecraft3: {
-            title: "🏰 Building Epic Structures",
-            content: `
-                <h3>Building Tips & Tricks</h3>
-                <div style="text-align: left; max-width: 500px; margin: 0 auto;">
-                    <h4>🎨 Design Tips:</h4>
-                    <ul style="margin: 10px 0;">
-                        <li>📏 Plan your build first</li>
-                        <li>🎨 Use different block types</li>
-                        <li>📐 Add depth with stairs/slabs</li>
-                        <li>🪟 Don't forget windows!</li>
-                        <li>🌿 Add landscaping around</li>
-                    </ul>
-                    <h4>🏗️ Cool Building Ideas:</h4>
-                    <ul style="margin: 10px 0;">
-                        <li>🏰 Medieval castles</li>
-                        <li>🏙️ Modern cities</li>
-                        <li>🚁 Flying machines</li>
-                        <li>🌉 Epic bridges</li>
-                        <li>🏔️ Mountain bases</li>
-                    </ul>
-                    <p><strong>🎯 Pro Tip:</strong> Study real architecture for inspiration!</p>
-                </div>
-            `
-        },
-        python1: {
-            title: "🐍 Python for Beginners",
-            content: `
-                <h3>Start Coding with Python!</h3>
-                <div style="text-align: left; max-width: 500px; margin: 0 auto;">
-                    <h4>📝 Your First Program:</h4>
-                    <div style="background: #2c3e50; color: #ecf0f1; padding: 15px; border-radius: 8px; margin: 10px 0; font-family: monospace;">
-print("Hello, World!")<br>
-name = "Ethan"<br>
-print("My name is", name)
-                    </div>
-                    <h4>🔧 Cool Things to Try:</h4>
-                    <ul style="margin: 10px 0;">
-                        <li>🎲 Random number games</li>
-                        <li>📊 Simple calculators</li>
-                        <li>🎨 Drawing with turtle graphics</li>
-                        <li>🎮 Text-based games</li>
-                    </ul>
-                    <p><strong>🚀 Fun Fact:</strong> Python is named after Monty Python's Flying Circus!</p>
-                </div>
-            `
-        },
-        html1: {
-            title: "🌐 HTML Basics",
-            content: `
-                <h3>Build Your First Website!</h3>
-                <div style="text-align: left; max-width: 500px; margin: 0 auto;">
-                    <h4>📝 Basic HTML Structure:</h4>
-                    <div style="background: #2c3e50; color: #ecf0f1; padding: 15px; border-radius: 8px; margin: 10px 0; font-family: monospace; font-size: 12px;">
-&lt;html&gt;<br>
-&nbsp;&nbsp;&lt;head&gt;<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&lt;title&gt;My Website&lt;/title&gt;<br>
-&nbsp;&nbsp;&lt;/head&gt;<br>
-&nbsp;&nbsp;&lt;body&gt;<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&lt;h1&gt;Welcome!&lt;/h1&gt;<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&lt;p&gt;This is my website&lt;/p&gt;<br>
-&nbsp;&nbsp;&lt;/body&gt;<br>
-&lt;/html&gt;
-                    </div>
-                    <h4>🏷️ Common Tags:</h4>
-                    <ul style="margin: 10px 0;">
-                        <li>&lt;h1&gt; - Big headings</li>
-                        <li>&lt;p&gt; - Paragraphs</li>
-                        <li>&lt;img&gt; - Pictures</li>
-                        <li>&lt;a&gt; - Links</li>
-                    </ul>
-                </div>
-            `
-        },
-        js1: {
-            title: "✨ JavaScript Fun",
-            content: `
-                <h3>Make Websites Interactive!</h3>
-                <div style="text-align: left; max-width: 500px; margin: 0 auto;">
-                    <h4>🎮 Try This Code:</h4>
-                    <div style="background: #2c3e50; color: #ecf0f1; padding: 15px; border-radius: 8px; margin: 10px 0; font-family: monospace; font-size: 12px;">
-function sayHello() {<br>
-&nbsp;&nbsp;alert("Hello from JavaScript!");<br>
-}<br><br>
-// Make a button that changes colors<br>
-button.onclick = function() {<br>
-&nbsp;&nbsp;button.style.backgroundColor = "red";<br>
-};
-                    </div>
-                    <h4>🌟 Cool JavaScript Features:</h4>
-                    <ul style="margin: 10px 0;">
-                        <li>🎨 Change colors and styles</li>
-                        <li>🎬 Create animations</li>
-                        <li>🎮 Build interactive games</li>
-                        <li>📱 Respond to clicks and typing</li>
-                    </ul>
-                </div>
-            `
-        },
-        math1: {
-            title: "🍕 What does it feel like to invent math?",
-            content: `
-                <h3>Fractions Made Easy!</h3>
-                <div style="text-align: left; max-width: 500px; margin: 0 auto;">
-                    <h4>🍕 Pizza Fractions:</h4>
-                    <div style="font-size: 2rem; text-align: center; margin: 20px 0;">
-                        🍕🍕🍕🍕 = 4/4 = 1 whole pizza<br>
-                        🍕🍕🍕⬜ = 3/4 pizza<br>
-                        🍕🍕⬜⬜ = 2/4 = 1/2 pizza<br>
-                        🍕⬜⬜⬜ = 1/4 pizza
-                    </div>
-                    <h4>🧮 Fraction Facts:</h4>
-                    <ul style="margin: 10px 0;">
-                        <li>🔢 Top number = numerator</li>
-                        <li>📏 Bottom number = denominator</li>
-                        <li>➕ Add fractions with same bottom numbers</li>
-                        <li>✖️ Multiply across: 1/2 × 1/3 = 1/6</li>
-                    </ul>
-                    <p><strong>🎯 Tip:</strong> Think of fractions as pieces of pie!</p>
-                </div>
-            `
-        },
-        geometry1: {
-            title: "📐 Geometry Adventures",
-            content: `
-                <h3>Explore Shapes and Angles!</h3>
-                <div style="text-align: left; max-width: 500px; margin: 0 auto;">
-                    <h4>📐 Basic Shapes:</h4>
-                    <div style="font-size: 1.5rem; text-align: center; margin: 20px 0;">
-                        🔺 Triangle (3 sides)<br>
-                        🔲 Square (4 equal sides)<br>
-                        🔳 Rectangle (4 sides, opposite equal)<br>
-                        ⭕ Circle (curved, no corners)
-                    </div>
-                    <h4>📏 Angle Types:</h4>
-                    <ul style="margin: 10px 0;">
-                        <li>📐 Right angle = 90° (corner of square)</li>
-                        <li>📏 Straight angle = 180° (straight line)</li>
-                        <li>🔄 Full circle = 360°</li>
-                    </ul>
-                    <p><strong>🌟 Fun Fact:</strong> A triangle's angles always add up to 180°!</p>
-                </div>
-            `
-        },
-        math2: {
-            title: "🎩 Cool Math Tricks",
-            content: `
-                <h3>Amazing Mental Math!</h3>
-                <div style="text-align: left; max-width: 500px; margin: 0 auto;">
-                    <h4>⚡ Quick Multiplication:</h4>
-                    <div style="background: #f8f9fa; padding: 15px; border-radius: 8px; margin: 10px 0;">
-                        <strong>× 9 Trick:</strong><br>
-                        9 × 7 = ?<br>
-                        7 - 1 = 6 (tens)<br>
-                        9 - 6 = 3 (ones)<br>
-                        Answer: 63! ✨
-                    </div>
-                    <h4>🔢 Number Patterns:</h4>
-                    <ul style="margin: 10px 0;">
-                        <li>🤚 Count by 5s using your fingers</li>
-                        <li>📊 Even numbers end in 0,2,4,6,8</li>
-                        <li>🎯 Odd numbers end in 1,3,5,7,9</li>
-                        <li>✨ Any number × 0 = 0</li>
-                    </ul>
-                    <p><strong>🧠 Brain Teaser:</strong> What's 1+2+3+4+5+6+7+8+9+10? (Answer: 55!)</p>
-                </div>
-            `
-        }
-    };
-
-    const content = videoContent[videoId];
-    if (content) {
-        createGameModal(content.title, content.content);
-    }
-}
