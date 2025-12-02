@@ -2283,11 +2283,11 @@ function startComputerGame() {
             icon.textContent = part.icon;
             partDiv.appendChild(icon);
 
-            // Part name
-            const name = document.createElement('div');
-            name.style.cssText = 'font-size: 10px; color: white; font-weight: bold; margin-top: 2px;';
-            name.textContent = part.name;
-            partDiv.appendChild(name);
+            // Part name - HIDDEN (user requested to not show names)
+            // const name = document.createElement('div');
+            // name.style.cssText = 'font-size: 10px; color: white; font-weight: bold; margin-top: 2px;';
+            // name.textContent = part.name;
+            // partDiv.appendChild(name);
 
             // Add X marker if broken
             if (isBroken) {
@@ -2343,7 +2343,6 @@ function startComputerGame() {
 
             partDiv.innerHTML = `
                 <div style="font-size: 28px;">${part.icon}</div>
-                <div style="font-size: 11px; color: white; font-weight: bold; margin-top: 5px;">${part.name}</div>
             `;
 
             // Drag events
@@ -2426,10 +2425,8 @@ function startComputerGame() {
         partsFixed++;
         partsCounter.textContent = `Parts Fixed: ${partsFixed}/${brokenParts.length}`;
 
-        // Check win condition
-        if (partsFixed === brokenParts.length) {
-            setTimeout(() => endGame(), 500);
-        }
+        // Don't end game early - wait for timer to run out
+        // User requested: only win when timer is up AND all parts are fixed
     }
 
     function startTimer() {
