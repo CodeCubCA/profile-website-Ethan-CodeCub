@@ -2428,8 +2428,22 @@ function startComputerGame() {
         partsFixed++;
         partsCounter.textContent = `Parts Fixed: ${partsFixed}/${brokenParts.length}`;
 
-        // Don't end game early - wait for timer to run out
-        // User requested: only win when timer is up AND all parts are fixed
+        // Check if all parts are fixed - go to next computer
+        if (partsFixed === brokenParts.length) {
+            gameActive = false;
+            clearInterval(timerInterval);
+
+            // Show success message and reset to start screen
+            setTimeout(() => {
+                gameScreen.style.display = 'none';
+                startScreen.style.display = 'flex';
+
+                // Reset game state
+                partsFixed = 0;
+                timeLeft = 60;
+                brokenParts = [];
+            }, 800); // Brief delay to show the last checkmark
+        }
     }
 
     function startTimer() {
