@@ -2121,60 +2121,73 @@ function startBlockGame() {
 
 function openFixComputer() {
     createGameModal('Fix the Computer', `
-        <div id="computerGame" style="width: 100%; height: 500px; background: linear-gradient(180deg, #8B4513 0%, #A0522D 100%); position: relative; overflow: hidden; border-radius: 10px; padding: 20px;">
-            <div style="text-align: center; color: white; margin-bottom: 15px;">
-                <h3 style="margin: 0;">🔧 Computer Repair Shop</h3>
-                <p style="margin: 5px 0; font-size: 14px;">Drag computer parts to fix the broken computer!</p>
-                <div id="computerScore" style="font-weight: bold; font-size: 18px;">Parts Fixed: 0/6</div>
+        <div id="computerGame" style="width: 100%; height: 550px; background: linear-gradient(180deg, #2c3e50 0%, #34495e 100%); position: relative; overflow: hidden; border-radius: 10px; padding: 20px;">
+            <!-- Initial Screen: Closed Computer -->
+            <div id="startScreen" style="text-align: center; height: 100%;">
+                <h2 style="color: white; margin-bottom: 20px;">🔧 Computer Repair Shop</h2>
+                <p style="color: #ecf0f1; margin-bottom: 30px;">A customer brought in a broken computer. Open it and fix the broken parts before time runs out!</p>
+
+                <div style="margin: 30px auto; width: 300px; height: 250px; background: linear-gradient(145deg, #555, #222); border-radius: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); position: relative; border: 3px solid #333;">
+                    <div style="position: absolute; top: 10px; right: 10px; font-size: 80px;">💻</div>
+                    <div style="position: absolute; bottom: 20px; left: 50%; transform: translateX(-50%); color: #7f8c8d; font-size: 14px;">Dell OptiPlex 7090</div>
+                </div>
+
+                <div style="margin: 20px auto; width: 200px; height: 80px; background: linear-gradient(145deg, #8B4513, #654321); border-radius: 10px; box-shadow: 0 5px 15px rgba(0,0,0,0.4); position: relative; border: 2px solid #A0522D;">
+                    <div style="text-align: center; padding-top: 10px; color: #fff; font-weight: bold;">🧰 Toolbox</div>
+                    <div style="text-align: center; font-size: 30px;">🔧 🪛</div>
+                </div>
+
+                <button id="openComputerBtn" style="margin-top: 30px; padding: 15px 40px; font-size: 18px; background: linear-gradient(145deg, #27ae60, #229954); color: white; border: none; border-radius: 10px; cursor: pointer; font-weight: bold; box-shadow: 0 5px 15px rgba(39,174,96,0.4); transition: transform 0.2s;">
+                    🔓 Open Computer & Start Repair
+                </button>
             </div>
 
-            <div style="display: flex; gap: 20px; height: 380px;">
-                <!-- Broken Computer Area -->
-                <div id="computerArea" style="flex: 1; background: #333; border-radius: 10px; position: relative; border: 3px dashed #666;">
-                    <div style="text-align: center; color: #fff; padding: 10px; background: rgba(0,0,0,0.5);">
-                        💻 Broken Computer
+            <!-- Game Screen: Open Computer (Hidden Initially) -->
+            <div id="gameScreen" style="display: none; height: 100%;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+                    <div style="color: white;">
+                        <h3 style="margin: 0;">🔧 Repair in Progress</h3>
+                        <div id="partsCounter" style="font-size: 16px; margin-top: 5px;">Parts Fixed: 0/<span id="totalBroken">0</span></div>
                     </div>
-                    <div id="dropZones" style="padding: 20px;">
-                        <div class="drop-zone" data-part="cpu" style="width: 80px; height: 80px; border: 2px dashed #ff6b6b; border-radius: 5px; margin: 10px auto; display: flex; align-items: center; justify-content: center; background: rgba(255,107,107,0.1); color: #ff6b6b; font-size: 12px; text-align: center;">CPU<br>Slot</div>
-                        <div class="drop-zone" data-part="ram" style="width: 120px; height: 60px; border: 2px dashed #4ecdc4; border-radius: 5px; margin: 10px auto; display: flex; align-items: center; justify-content: center; background: rgba(78,205,196,0.1); color: #4ecdc4; font-size: 12px; text-align: center;">RAM<br>Slot</div>
-                        <div class="drop-zone" data-part="gpu" style="width: 100px; height: 70px; border: 2px dashed #95e1d3; border-radius: 5px; margin: 10px auto; display: flex; align-items: center; justify-content: center; background: rgba(149,225,211,0.1); color: #95e1d3; font-size: 12px; text-align: center;">GPU<br>Slot</div>
-                        <div style="display: flex; gap: 10px; justify-content: center; margin-top: 10px;">
-                            <div class="drop-zone" data-part="hdd" style="width: 70px; height: 50px; border: 2px dashed #f38181; border-radius: 5px; display: flex; align-items: center; justify-content: center; background: rgba(243,129,129,0.1); color: #f38181; font-size: 11px; text-align: center;">HDD</div>
-                            <div class="drop-zone" data-part="psu" style="width: 70px; height: 50px; border: 2px dashed #feca57; border-radius: 5px; display: flex; align-items: center; justify-content: center; background: rgba(254,202,87,0.1); color: #feca57; font-size: 11px; text-align: center;">PSU</div>
-                            <div class="drop-zone" data-part="fan" style="width: 70px; height: 50px; border: 2px dashed #a29bfe; border-radius: 5px; display: flex; align-items: center; justify-content: center; background: rgba(162,155,254,0.1); color: #a29bfe; font-size: 11px; text-align: center;">FAN</div>
-                        </div>
+                    <div id="timerDisplay" style="font-size: 32px; font-weight: bold; color: #27ae60; background: rgba(0,0,0,0.3); padding: 10px 20px; border-radius: 10px;">
+                        ⏱️ 60s
                     </div>
                 </div>
 
-                <!-- Parts Table Area -->
-                <div style="flex: 1; background: #8B6914; border-radius: 10px; padding: 15px; border: 3px solid #654321;">
-                    <div style="text-align: center; color: white; margin-bottom: 15px;">🔩 Computer Parts</div>
-                    <div id="partsArea" style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
-                        <div class="computer-part" draggable="true" data-part="cpu" style="background: #ff6b6b; padding: 15px; border-radius: 8px; text-align: center; cursor: move; box-shadow: 0 4px 6px rgba(0,0,0,0.3);">
-                            <div style="font-size: 30px;">🧠</div>
-                            <div style="font-size: 12px; color: white; font-weight: bold;">CPU</div>
+                <div style="display: flex; gap: 15px; height: 420px;">
+                    <!-- Computer Interior (Left Side) -->
+                    <div style="flex: 1.2; background: linear-gradient(145deg, #1a1a1a, #2d2d2d); border-radius: 10px; padding: 15px; border: 3px solid #444; position: relative;">
+                        <div style="text-align: center; color: #fff; margin-bottom: 10px; font-weight: bold; background: rgba(0,0,0,0.5); padding: 8px; border-radius: 5px;">
+                            💻 Computer Interior
                         </div>
-                        <div class="computer-part" draggable="true" data-part="ram" style="background: #4ecdc4; padding: 15px; border-radius: 8px; text-align: center; cursor: move; box-shadow: 0 4px 6px rgba(0,0,0,0.3);">
-                            <div style="font-size: 30px;">💾</div>
-                            <div style="font-size: 12px; color: white; font-weight: bold;">RAM</div>
-                        </div>
-                        <div class="computer-part" draggable="true" data-part="gpu" style="background: #95e1d3; padding: 15px; border-radius: 8px; text-align: center; cursor: move; box-shadow: 0 4px 6px rgba(0,0,0,0.3);">
-                            <div style="font-size: 30px;">🎮</div>
-                            <div style="font-size: 12px; color: white; font-weight: bold;">GPU</div>
-                        </div>
-                        <div class="computer-part" draggable="true" data-part="hdd" style="background: #f38181; padding: 15px; border-radius: 8px; text-align: center; cursor: move; box-shadow: 0 4px 6px rgba(0,0,0,0.3);">
-                            <div style="font-size: 30px;">💿</div>
-                            <div style="font-size: 12px; color: white; font-weight: bold;">HDD</div>
-                        </div>
-                        <div class="computer-part" draggable="true" data-part="psu" style="background: #feca57; padding: 15px; border-radius: 8px; text-align: center; cursor: move; box-shadow: 0 4px 6px rgba(0,0,0,0.3);">
-                            <div style="font-size: 30px;">⚡</div>
-                            <div style="font-size: 12px; color: white; font-weight: bold;">PSU</div>
-                        </div>
-                        <div class="computer-part" draggable="true" data-part="fan" style="background: #a29bfe; padding: 15px; border-radius: 8px; text-align: center; cursor: move; box-shadow: 0 4px 6px rgba(0,0,0,0.3);">
-                            <div style="font-size: 30px;">🌀</div>
-                            <div style="font-size: 12px; color: white; font-weight: bold;">FAN</div>
+                        <div id="computerInterior" style="position: relative; height: 350px; background: #111; border-radius: 8px; padding: 15px; border: 2px solid #333;">
+                            <!-- Computer parts will be rendered here with X marks on broken ones -->
                         </div>
                     </div>
+
+                    <!-- Parts Inventory (Right Side) -->
+                    <div style="flex: 0.8; background: linear-gradient(145deg, #8B4513, #654321); border-radius: 10px; padding: 15px; border: 3px solid #A0522D; overflow-y: auto;">
+                        <div style="text-align: center; color: white; margin-bottom: 10px; font-weight: bold; background: rgba(0,0,0,0.3); padding: 8px; border-radius: 5px;">
+                            🔩 Replacement Parts
+                        </div>
+                        <div id="partsInventory" style="display: flex; flex-direction: column; gap: 10px;">
+                            <!-- Infinite parts inventory will be here -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Results Screen (Hidden Initially) -->
+            <div id="resultsScreen" style="display: none; text-align: center; height: 100%; padding-top: 50px;">
+                <h2 style="color: white; margin-bottom: 20px;">⏰ Time's Up!</h2>
+                <div id="resultsContent" style="background: rgba(0,0,0,0.5); padding: 40px; border-radius: 15px; max-width: 400px; margin: 0 auto;">
+                    <div style="font-size: 60px; margin-bottom: 20px;" id="resultsEmoji">⚙️</div>
+                    <div style="color: white; font-size: 24px; margin-bottom: 15px;" id="resultsMessage">Good effort!</div>
+                    <div style="color: #ecf0f1; font-size: 18px; margin-bottom: 10px;" id="partsFixedResult">Parts Fixed: 0/0</div>
+                    <div style="color: #3498db; font-size: 28px; font-weight: bold; margin-bottom: 30px;" id="accuracyResult">Accuracy: 0%</div>
+                    <button onclick="location.reload()" style="padding: 15px 40px; font-size: 18px; background: linear-gradient(145deg, #3498db, #2980b9); color: white; border: none; border-radius: 10px; cursor: pointer; font-weight: bold; box-shadow: 0 5px 15px rgba(52,152,219,0.4);">
+                        🔄 Play Again
+                    </button>
                 </div>
             </div>
         </div>
@@ -2182,145 +2195,312 @@ function openFixComputer() {
 }
 
 function startComputerGame() {
+    // Part definitions with icons and colors
+    const allParts = [
+        { id: 'cpu', name: 'CPU', icon: '🧠', color: '#ff6b6b' },
+        { id: 'ram', name: 'RAM', icon: '💾', color: '#4ecdc4' },
+        { id: 'gpu', name: 'GPU', icon: '🎮', color: '#95e1d3' },
+        { id: 'hdd', name: 'HDD', icon: '💿', color: '#f38181' },
+        { id: 'psu', name: 'PSU', icon: '⚡', color: '#feca57' },
+        { id: 'fan', name: 'Cooling Fan', icon: '🌀', color: '#a29bfe' },
+        { id: 'motherboard', name: 'Motherboard', icon: '🔌', color: '#fd79a8' },
+        { id: 'ssd', name: 'SSD', icon: '💽', color: '#6c5ce7' }
+    ];
+
+    // Game state
     let partsFixed = 0;
-    const totalParts = 6;
-    const scoreDisplay = document.getElementById('computerScore');
-    const parts = document.querySelectorAll('.computer-part');
-    const dropZones = document.querySelectorAll('.drop-zone');
+    let timeLeft = 60;
+    let timerInterval = null;
+    let gameActive = false;
+    let brokenParts = [];
+    let draggedPart = null;
 
-    let draggedElement = null;
+    // Get DOM elements
+    const startScreen = document.getElementById('startScreen');
+    const gameScreen = document.getElementById('gameScreen');
+    const resultsScreen = document.getElementById('resultsScreen');
+    const openBtn = document.getElementById('openComputerBtn');
+    const timerDisplay = document.getElementById('timerDisplay');
+    const partsCounter = document.getElementById('partsCounter');
+    const computerInterior = document.getElementById('computerInterior');
+    const partsInventory = document.getElementById('partsInventory');
 
-    // Drag start
-    parts.forEach(part => {
-        part.addEventListener('dragstart', (e) => {
-            draggedElement = e.target;
-            e.target.style.opacity = '0.5';
-        });
-
-        part.addEventListener('dragend', (e) => {
-            e.target.style.opacity = '1';
-        });
-
-        // Touch support for mobile
-        part.addEventListener('touchstart', (e) => {
-            draggedElement = e.target;
-            const touch = e.touches[0];
-            const clone = e.target.cloneNode(true);
-            clone.style.position = 'fixed';
-            clone.style.top = touch.clientY - 40 + 'px';
-            clone.style.left = touch.clientX - 40 + 'px';
-            clone.style.opacity = '0.8';
-            clone.style.pointerEvents = 'none';
-            clone.id = 'dragging-clone';
-            clone.style.zIndex = '1000';
-            document.body.appendChild(clone);
-        });
-
-        part.addEventListener('touchmove', (e) => {
-            e.preventDefault();
-            const touch = e.touches[0];
-            const clone = document.getElementById('dragging-clone');
-            if (clone) {
-                clone.style.top = touch.clientY - 40 + 'px';
-                clone.style.left = touch.clientX - 40 + 'px';
-            }
-        });
-
-        part.addEventListener('touchend', (e) => {
-            const clone = document.getElementById('dragging-clone');
-            if (clone) {
-                const touch = e.changedTouches[0];
-                const dropTarget = document.elementFromPoint(touch.clientX, touch.clientY);
-
-                if (dropTarget && dropTarget.classList.contains('drop-zone')) {
-                    const partType = draggedElement.getAttribute('data-part');
-                    const zoneType = dropTarget.getAttribute('data-part');
-
-                    if (partType === zoneType && !dropTarget.classList.contains('filled')) {
-                        handleDrop(dropTarget, draggedElement);
-                    }
-                }
-                clone.remove();
-            }
-        });
+    // Open computer button - starts the game
+    openBtn.addEventListener('click', () => {
+        startScreen.style.display = 'none';
+        gameScreen.style.display = 'block';
+        initializeGame();
     });
 
-    // Drop zones
-    dropZones.forEach(zone => {
-        zone.addEventListener('dragover', (e) => {
-            e.preventDefault();
-            zone.style.borderColor = '#00ff00';
-            zone.style.background = 'rgba(0,255,0,0.2)';
+    function initializeGame() {
+        // Randomly select 3-5 broken parts
+        const numBroken = Math.floor(Math.random() * 3) + 3; // 3 to 5 parts
+        brokenParts = [];
+        const shuffled = [...allParts].sort(() => Math.random() - 0.5);
+        brokenParts = shuffled.slice(0, numBroken);
+
+        document.getElementById('totalBroken').textContent = brokenParts.length;
+
+        // Render computer interior with all parts
+        renderComputerInterior();
+
+        // Render infinite parts inventory
+        renderPartsInventory();
+
+        // Start timer
+        gameActive = true;
+        startTimer();
+    }
+
+    function renderComputerInterior() {
+        computerInterior.innerHTML = '';
+
+        // Render all parts in computer
+        allParts.forEach((part, index) => {
+            const isBroken = brokenParts.find(p => p.id === part.id);
+
+            const partDiv = document.createElement('div');
+            partDiv.className = 'computer-part-slot';
+            partDiv.setAttribute('data-part-id', part.id);
+            partDiv.style.cssText = `
+                position: relative;
+                width: 90px;
+                height: 70px;
+                background: ${isBroken ? 'rgba(231, 76, 60, 0.2)' : 'rgba(46, 204, 113, 0.2)'};
+                border: 2px solid ${isBroken ? '#e74c3c' : '#2ecc71'};
+                border-radius: 8px;
+                display: inline-flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+                margin: 8px;
+                transition: all 0.3s ease;
+            `;
+
+            // Part icon
+            const icon = document.createElement('div');
+            icon.style.fontSize = '32px';
+            icon.textContent = part.icon;
+            partDiv.appendChild(icon);
+
+            // Part name
+            const name = document.createElement('div');
+            name.style.cssText = 'font-size: 10px; color: white; font-weight: bold; margin-top: 2px;';
+            name.textContent = part.name;
+            partDiv.appendChild(name);
+
+            // Add X marker if broken
+            if (isBroken) {
+                const xMark = document.createElement('div');
+                xMark.className = 'x-marker';
+                xMark.style.cssText = `
+                    position: absolute;
+                    top: -10px;
+                    right: -10px;
+                    width: 30px;
+                    height: 30px;
+                    background: #e74c3c;
+                    color: white;
+                    border-radius: 50%;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    font-size: 20px;
+                    font-weight: bold;
+                    box-shadow: 0 2px 8px rgba(231, 76, 60, 0.6);
+                    animation: pulse 1s infinite;
+                `;
+                xMark.textContent = '✗';
+                partDiv.appendChild(xMark);
+
+                // Make it a drop zone
+                partDiv.classList.add('drop-zone');
+                setupDropZone(partDiv, part.id);
+            }
+
+            computerInterior.appendChild(partDiv);
         });
+    }
 
-        zone.addEventListener('dragleave', (e) => {
-            zone.style.borderColor = '';
-            zone.style.background = '';
+    function renderPartsInventory() {
+        partsInventory.innerHTML = '';
+
+        // Create infinite supply of all parts
+        allParts.forEach(part => {
+            const partDiv = document.createElement('div');
+            partDiv.className = 'inventory-part';
+            partDiv.setAttribute('data-part-id', part.id);
+            partDiv.draggable = true;
+            partDiv.style.cssText = `
+                background: ${part.color};
+                padding: 12px;
+                border-radius: 8px;
+                text-align: center;
+                cursor: move;
+                box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+                transition: transform 0.2s;
+            `;
+
+            partDiv.innerHTML = `
+                <div style="font-size: 28px;">${part.icon}</div>
+                <div style="font-size: 11px; color: white; font-weight: bold; margin-top: 5px;">${part.name}</div>
+            `;
+
+            // Drag events
+            partDiv.addEventListener('dragstart', (e) => {
+                draggedPart = part.id;
+                partDiv.style.opacity = '0.5';
+            });
+
+            partDiv.addEventListener('dragend', (e) => {
+                partDiv.style.opacity = '1';
+                draggedPart = null;
+            });
+
+            partDiv.addEventListener('mouseenter', () => {
+                partDiv.style.transform = 'scale(1.05)';
+            });
+
+            partDiv.addEventListener('mouseleave', () => {
+                partDiv.style.transform = 'scale(1)';
+            });
+
+            partsInventory.appendChild(partDiv);
         });
+    }
 
-        zone.addEventListener('drop', (e) => {
+    function setupDropZone(element, partId) {
+        element.addEventListener('dragover', (e) => {
             e.preventDefault();
-            zone.style.borderColor = '';
-            zone.style.background = '';
-
-            if (draggedElement) {
-                const partType = draggedElement.getAttribute('data-part');
-                const zoneType = zone.getAttribute('data-part');
-
-                if (partType === zoneType && !zone.classList.contains('filled')) {
-                    handleDrop(zone, draggedElement);
-                }
+            if (gameActive && draggedPart === partId) {
+                element.style.borderColor = '#2ecc71';
+                element.style.background = 'rgba(46, 204, 113, 0.3)';
             }
         });
-    });
 
-    function handleDrop(zone, part) {
-        // Mark zone as filled
-        zone.classList.add('filled');
+        element.addEventListener('dragleave', () => {
+            element.style.borderColor = '#e74c3c';
+            element.style.background = 'rgba(231, 76, 60, 0.2)';
+        });
 
-        // Update zone appearance
-        const partIcon = part.querySelector('div').innerHTML;
-        zone.innerHTML = `<div style="font-size: 40px;">${partIcon}</div>`;
-        zone.style.border = '3px solid #00ff00';
-        zone.style.background = 'rgba(0,255,0,0.3)';
+        element.addEventListener('drop', (e) => {
+            e.preventDefault();
+            if (gameActive && draggedPart === partId && element.classList.contains('drop-zone')) {
+                fixPart(element, partId);
+            }
+        });
+    }
 
-        // Remove part from parts area
-        part.style.visibility = 'hidden';
+    function fixPart(element, partId) {
+        // Remove X marker
+        const xMark = element.querySelector('.x-marker');
+        if (xMark) xMark.remove();
 
-        // Update score
-        partsFixed++;
-        scoreDisplay.textContent = `Parts Fixed: ${partsFixed}/${totalParts}`;
+        // Update styling to show it's fixed
+        element.style.background = 'rgba(46, 204, 113, 0.3)';
+        element.style.borderColor = '#2ecc71';
+        element.classList.remove('drop-zone');
 
         // Success animation
-        const success = document.createElement('div');
-        success.innerHTML = '✅';
-        success.style.cssText = `
+        const checkmark = document.createElement('div');
+        checkmark.textContent = '✓';
+        checkmark.style.cssText = `
             position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            font-size: 60px;
-            animation: successPop 0.6s ease-out;
-            pointer-events: none;
+            top: -10px;
+            right: -10px;
+            width: 30px;
+            height: 30px;
+            background: #2ecc71;
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            font-weight: bold;
+            box-shadow: 0 2px 8px rgba(46, 204, 113, 0.6);
         `;
-        zone.appendChild(success);
-        setTimeout(() => success.remove(), 600);
+        element.appendChild(checkmark);
 
-        // Check if all parts are fixed
-        if (partsFixed === totalParts) {
-            setTimeout(() => {
-                alert('🎉 Amazing! You fixed the computer! All parts installed successfully!');
-            }, 500);
+        // Update counter
+        partsFixed++;
+        partsCounter.textContent = `Parts Fixed: ${partsFixed}/${brokenParts.length}`;
+
+        // Check win condition
+        if (partsFixed === brokenParts.length) {
+            setTimeout(() => endGame(), 500);
         }
     }
 
-    // Add CSS animations
+    function startTimer() {
+        timerInterval = setInterval(() => {
+            if (!gameActive) return;
+
+            timeLeft--;
+            timerDisplay.textContent = `⏱️ ${timeLeft}s`;
+
+            // Update timer color based on time left
+            if (timeLeft > 30) {
+                timerDisplay.style.color = '#27ae60'; // Green
+            } else if (timeLeft > 10) {
+                timerDisplay.style.color = '#f39c12'; // Yellow
+            } else {
+                timerDisplay.style.color = '#e74c3c'; // Red
+            }
+
+            if (timeLeft <= 0) {
+                endGame();
+            }
+        }, 1000);
+    }
+
+    function endGame() {
+        gameActive = false;
+        clearInterval(timerInterval);
+
+        gameScreen.style.display = 'none';
+        resultsScreen.style.display = 'block';
+
+        // Calculate accuracy
+        const accuracy = Math.round((partsFixed / brokenParts.length) * 100);
+
+        // Update results
+        document.getElementById('partsFixedResult').textContent = `Parts Fixed: ${partsFixed}/${brokenParts.length}`;
+        document.getElementById('accuracyResult').textContent = `Accuracy: ${accuracy}%`;
+
+        // Set emoji and message based on performance
+        const resultsEmoji = document.getElementById('resultsEmoji');
+        const resultsMessage = document.getElementById('resultsMessage');
+
+        if (accuracy === 100) {
+            resultsEmoji.textContent = '🏆';
+            resultsMessage.textContent = 'Perfect! Computer fully repaired!';
+            resultsMessage.style.color = '#2ecc71';
+        } else if (accuracy >= 75) {
+            resultsEmoji.textContent = '🎉';
+            resultsMessage.textContent = 'Great job! Almost there!';
+            resultsMessage.style.color = '#3498db';
+        } else if (accuracy >= 50) {
+            resultsEmoji.textContent = '👍';
+            resultsMessage.textContent = 'Good effort! Keep practicing!';
+            resultsMessage.style.color = '#f39c12';
+        } else if (accuracy > 0) {
+            resultsEmoji.textContent = '😅';
+            resultsMessage.textContent = 'Nice try! Try again!';
+            resultsMessage.style.color = '#e67e22';
+        } else {
+            resultsEmoji.textContent = '💔';
+            resultsMessage.textContent = 'No parts fixed. Better luck next time!';
+            resultsMessage.style.color = '#e74c3c';
+        }
+    }
+
+    // Add pulse animation for X markers
     const style = document.createElement('style');
     style.textContent = `
-        @keyframes successPop {
-            0% { transform: translate(-50%, -50%) scale(0); opacity: 0; }
-            50% { transform: translate(-50%, -50%) scale(1.2); opacity: 1; }
-            100% { transform: translate(-50%, -50%) scale(1); opacity: 0; }
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
         }
     `;
     document.head.appendChild(style);
