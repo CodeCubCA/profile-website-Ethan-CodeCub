@@ -255,8 +255,43 @@ function executeStatement(line, variables) {
     if (printMatch) {
         let printContent = printMatch[1];
 
+        // Handle f-strings
+        if (printContent.startsWith('f"') || printContent.startsWith("f'")) {
+            // Extract the f-string content
+            const fStringContent = printContent.slice(2, -1);
+
+            // Replace {expression} with evaluated values
+            let output = fStringContent.replace(/\{([^}]+)\}/g, (match, expression) => {
+                expression = expression.trim();
+
+                // Handle simple expressions like i+1, i-1, etc.
+                if (expression.includes('+')) {
+                    const parts = expression.split('+');
+                    const left = variables[parts[0].trim()] || parts[0].trim();
+                    const right = parseInt(parts[1].trim());
+                    return (parseInt(left) + right);
+                } else if (expression.includes('-')) {
+                    const parts = expression.split('-');
+                    const left = variables[parts[0].trim()] || parts[0].trim();
+                    const right = parseInt(parts[1].trim());
+                    return (parseInt(left) - right);
+                } else if (expression.includes('*')) {
+                    const parts = expression.split('*');
+                    const left = variables[parts[0].trim()] || parts[0].trim();
+                    const right = parseInt(parts[1].trim());
+                    return (parseInt(left) * right);
+                }
+                // Handle simple variable references
+                else if (variables.hasOwnProperty(expression)) {
+                    return variables[expression];
+                }
+                return expression;
+            });
+
+            result += output + '\n';
+        }
         // Handle string concatenation with +
-        if (printContent.includes(' + ')) {
+        else if (printContent.includes(' + ')) {
             const parts = printContent.split(' + ');
             let output = '';
             for (let part of parts) {
