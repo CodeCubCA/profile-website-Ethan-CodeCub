@@ -92,6 +92,12 @@ function openJavaScriptEnvironment() {
     document.getElementById('jsEnvironment').style.display = 'flex';
 }
 
+function openCSSEnvironment() {
+    document.getElementById('cssEnvironment').style.display = 'flex';
+    // Auto-update preview
+    setTimeout(() => updateCSSPreview(), 500);
+}
+
 function closeCodingEnvironment(environmentId) {
     document.getElementById(environmentId).style.display = 'none';
 }
@@ -632,6 +638,149 @@ function clearJavaScriptCode() {
 
 function clearJavaScriptOutput() {
     document.getElementById('jsOutput').textContent = 'Click "Run Code" to see your JavaScript magic! ⚡';
+}
+
+// CSS Environment Functions
+function updateCSSPreview() {
+    const cssCode = document.getElementById('cssCodeEditor').value;
+    const preview = document.getElementById('cssPreview');
+
+    const htmlContent = `
+        <!DOCTYPE html>
+        <html>
+        <head>
+            <style>
+                body { margin: 20px; font-family: Arial, sans-serif; }
+                ${cssCode}
+            </style>
+        </head>
+        <body>
+            <div class="box">Box 1</div>
+            <div class="box">Box 2</div>
+            <div class="box">Box 3</div>
+            <p class="text">This is sample text</p>
+            <button class="btn">Button</button>
+        </body>
+        </html>
+    `;
+
+    preview.srcdoc = htmlContent;
+}
+
+function loadCSSExample(type = 'default') {
+    const editor = document.getElementById('cssCodeEditor');
+
+    const examples = {
+        default: `/* Colorful Boxes */
+.box {
+    width: 150px;
+    height: 100px;
+    margin: 10px;
+    padding: 20px;
+    border-radius: 10px;
+    text-align: center;
+    color: white;
+    font-weight: bold;
+}
+
+.box:nth-child(1) {
+    background-color: #ff6b6b;
+}
+
+.box:nth-child(2) {
+    background-color: #4ecdc4;
+}
+
+.box:nth-child(3) {
+    background-color: #45b7d1;
+}`,
+        gradient: `/* Beautiful Gradients */
+.box {
+    width: 200px;
+    height: 120px;
+    margin: 15px;
+    border-radius: 15px;
+    display: inline-block;
+}
+
+.box:nth-child(1) {
+    background: linear-gradient(45deg, #ff6b6b, #feca57);
+}
+
+.box:nth-child(2) {
+    background: linear-gradient(135deg, #667eea, #764ba2);
+}
+
+.box:nth-child(3) {
+    background: linear-gradient(to right, #11998e, #38ef7d);
+}`,
+        animation: `/* Cool Animations */
+@keyframes bounce {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-30px); }
+}
+
+@keyframes pulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.1); }
+}
+
+.box {
+    width: 100px;
+    height: 100px;
+    margin: 20px;
+    background: linear-gradient(45deg, #f093fb, #f5576c);
+    border-radius: 15px;
+    display: inline-block;
+    animation: bounce 2s infinite;
+}
+
+.btn {
+    animation: pulse 1.5s infinite;
+    background: #4ecdc4;
+    border: none;
+    padding: 15px 30px;
+    border-radius: 25px;
+    color: white;
+    font-size: 16px;
+    cursor: pointer;
+}`,
+        flexbox: `/* Flexbox Layout */
+body {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    gap: 20px;
+}
+
+.box {
+    flex: 0 1 150px;
+    height: 150px;
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    border-radius: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 20px;
+    box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+    transition: transform 0.3s;
+}
+
+.box:hover {
+    transform: translateY(-10px);
+}`
+    };
+
+    editor.value = examples[type] || examples.default;
+    updateCSSPreview();
+}
+
+function clearCSSCode() {
+    document.getElementById('cssCodeEditor').value = '';
+    loadCSSExample('default');
 }
 
 // Memory Game Variables

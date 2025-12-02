@@ -986,6 +986,71 @@
       </div>
     </div>
 
+    <div class="coding-environment html-layout" id="cssEnvironment">
+      <div class="coding-container">
+        <div class="coding-header">
+          <h2 class="coding-title">🎨 CSS Playground</h2>
+          <p class="coding-subtitle">Style your web pages beautifully!</p>
+          <button
+            class="close-coding-btn"
+            onclick="closeCodingEnvironment('cssEnvironment')"
+          >
+            ×
+          </button>
+        </div>
+
+        <div class="coding-content">
+          <div class="code-editor-section">
+            <div class="editor-header">
+              <h3>✏️ CSS Code Editor</h3>
+              <div class="editor-controls">
+                <button class="run-btn" onclick="updateCSSPreview()">
+                  🔄 Update Preview
+                </button>
+                <button class="clear-btn" onclick="clearCSSCode()">
+                  🗑️ Clear
+                </button>
+              </div>
+            </div>
+            <textarea
+              class="code-editor"
+              id="cssCodeEditor"
+              placeholder="Write your CSS code here..."
+            ></textarea>
+          </div>
+
+          <div class="preview-section">
+            <div class="preview-header">
+              <h3>👀 Live Preview</h3>
+            </div>
+            <iframe
+              class="html-preview"
+              id="cssPreview"
+              title="CSS Preview"
+            ></iframe>
+          </div>
+        </div>
+
+        <div class="coding-examples">
+          <h3>🎯 Try These Examples:</h3>
+          <div class="example-buttons">
+            <button class="example-btn" onclick="loadCSSExample('default')">
+              🎨 Colorful Boxes
+            </button>
+            <button class="example-btn" onclick="loadCSSExample('gradient')">
+              🌈 Gradients
+            </button>
+            <button class="example-btn" onclick="loadCSSExample('animation')">
+              ✨ Animations
+            </button>
+            <button class="example-btn" onclick="loadCSSExample('flexbox')">
+              📦 Flexbox Layout
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
     <!-- Memory Game Modal -->
     <div class="memory-game-modal" id="memoryGameModal">
       <div class="memory-game-container">
