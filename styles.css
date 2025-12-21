@@ -1631,6 +1631,88 @@ h1 {
     color: white;
 }
 
+/* AI Image Generator Project Styles */
+.ai-image-project {
+    transition: all 0.4s ease;
+    position: relative;
+    overflow: visible;
+}
+
+.ai-image-project:hover {
+    transform: translateY(-8px) scale(1.03);
+    box-shadow: 0 25px 50px rgba(147, 51, 234, 0.5), 0 15px 30px rgba(59, 130, 246, 0.3);
+}
+
+.ai-image-container {
+    background: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 50%, #9333ea 100%);
+    position: relative;
+    overflow: hidden;
+}
+
+.ai-image-container::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(45deg, transparent 30%, rgba(255,255,255,0.15) 50%, transparent 70%);
+    animation: shimmer 3s infinite;
+}
+
+.ai-image-title {
+    background: linear-gradient(135deg, #3b82f6, #9333ea);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    font-weight: bold;
+}
+
+.btn-ai-image-live {
+    background: linear-gradient(135deg, #3b82f6, #9333ea);
+    color: white;
+    position: relative;
+    overflow: hidden;
+}
+
+.btn-ai-image-live::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0;
+    height: 0;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.3);
+    transform: translate(-50%, -50%);
+    transition: width 0.6s, height 0.6s;
+}
+
+.btn-ai-image-live:hover::before {
+    width: 300px;
+    height: 300px;
+}
+
+.btn-ai-image-live:hover {
+    box-shadow: 0 8px 20px rgba(147, 51, 234, 0.5);
+}
+
+/* AI Image Tech Badges */
+.tech-badge.ai {
+    background: linear-gradient(135deg, #9333ea, #7c3aed);
+    color: white;
+}
+
+.tech-badge.huggingface {
+    background: linear-gradient(135deg, #f59e0b, #d97706);
+    color: white;
+}
+
+.tech-badge.pillow {
+    background: linear-gradient(135deg, #06b6d4, #0284c7);
+    color: white;
+}
+
 /* Responsive Design for Projects */
 @media (max-width: 768px) {
     .project-card {
